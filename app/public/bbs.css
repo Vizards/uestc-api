@@ -1,0 +1,34 @@
+body { padding-top: 0 !important }
+.attach_nopermission { display: none !important }
+body > div { display: none !important }
+body > #wp { display: block !important; min-width: 100% !important; max-width: 100% !important; width: 100% !important; }
+body > #wp > div { display: none !important }
+body > #wp > #ct { display: block !important; border: 0 none !important }
+body > #wp > #ct > div { display: none !important }
+body > #wp > #ct > #postlist { display: block !important }
+body > #wp > #ct > #postlist > table { display: none !important }
+body > #wp > #ct > #postlist > div { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 { display: block !important }
+body > #wp > #ct > #postlist > #post_25300777 > div { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr:nth-child(1) { display: block !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .pls { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pi { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pct > .pcb > div { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pct > .pcb > h3 { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pct > .pcb > dl { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pct > .pcb > .t_fsz { display: block !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pct > .pcb > .t_fsz > #digg_dz { display: none !important }
+body > #wp > #ct > #postlist > #post_25300777 > table > tbody > tr > .plc > .pct > .pcb > .t_fsz table { width: 100% !important }
+body > #wp > #ct > #postlist > #post_25300913 { display: block !important }
+body > #wp > #ct > #postlist > #post_25300913 > div { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr:nth-child(1) { display: block !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .pls { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pi { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pct > .pcb > div { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pct > .pcb > h3 { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pct > .pcb > dl { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pct > .pcb > .t_fsz { display: block !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pct > .pcb > .t_fsz > #digg_dz { display: none !important }
+body > #wp > #ct > #postlist > #post_25300913 > table > tbody > tr > .plc > .pct > .pcb > .t_fsz table { width: 100% !important }
