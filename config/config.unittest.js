@@ -13,4 +13,10 @@ module.exports = {
     password: process.env.YOUR_XIFU_PASS,
     roomId: process.env.YOUR_ROOM_ID,
   },
+
+  alinode: {
+    // 从 `Node.js 性能平台` 获取对应的接入参数
+    appid: process.env.ALINODE_APPID,
+    secret: process.env.ALINODE_SECRET,
+  },
 };
