@@ -1,7 +1,7 @@
 {
-  "name": "uestc",
+  "name": "uestc-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Intergrated REST API for UESTC",
   "private": true,
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
@@ -49,8 +49,8 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Vizards/uestc-api"
   },
-  "author": "Vizards",
-  "license": "MIT"
+  "author": "Vizards <vizards@front.dog>",
+  "license": "GPL-3.0"
 }
