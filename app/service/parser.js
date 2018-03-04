@@ -97,6 +97,14 @@ class parserService extends Service {
         address: $(el).children().get(4).children[0].data,
         seat: $(el).children().get(5).children[0].data,
         status: $(el).children().get(6).children[0].data,
+      } : $(el).children().length === 7 && i > 0 ? {
+        // 此处处理考试已经安排时间，但是座位号和考场教室尚未安排的情况
+        name: $(el).children().get(1).children[0].data,
+        date: $(el).children().get(2).children[0].data,
+        detail: $(el).children().get(3).children[0].data.replace(/\(.*\)/, ''),
+        address: $(el).children().get(4).children[0].children[0].data,
+        seat: $(el).children().get(4).children[0].children[0].data,
+        status: $(el).children().get(5).children[0].data,
       } : null;
     })
       .get();
