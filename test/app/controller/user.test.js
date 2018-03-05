@@ -91,7 +91,9 @@ describe('test/app/controller/user.test.js', () => {
       .expect('Content-Type', /json/)
       .expect(200);
     assert(res.body.code === 200);
-    assert(res.body.data.sum.hasOwnProperty('gpa') === true);
+    assert(res.body.data[0].year === 0);
+    assert(res.body.data[0].semester === 0);
+    assert(res.body.data[0].hasOwnProperty('gpa') === true);
   });
 
   it('should exit', async () => {

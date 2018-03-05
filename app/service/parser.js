@@ -148,7 +148,7 @@ class parserService extends Service {
 
   parseGPAData(body) {
     const $ = cheerio.load(body);
-    const arr =  $('body > .gridtable > tbody > tr').map((i, element) => {
+    const arr = $('body > .gridtable > tbody > tr').map((i, element) => {
       const year = Number($(element)
         .find('td:nth-of-type(1)')
         .text()
