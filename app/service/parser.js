@@ -148,53 +148,58 @@ class parserService extends Service {
 
   parseGPAData(body) {
     const $ = cheerio.load(body);
-    const Obj = {};
-    const arr = $('body > .gridtable > tbody > tr').map((i, element) => {
-      const id = $(element)
+    const arr =  $('body > .gridtable > tbody > tr').map((i, element) => {
+      const year = Number($(element)
         .find('td:nth-of-type(1)')
         .text()
         .trim()
-        .substr(0, 4) + '_' + $(element)
-          .find('td:nth-of-type(2)')
+        .substr(0, 4));
+      const semester = Number($(element)
+        .find('td:nth-of-type(2)')
+        .text()
+        .trim());
+
+      return year === 0 && semester === 0 ? {
+        year,
+        semester,
+        subject: $(element)
+          .find('th:nth-of-type(2)')
           .text()
-          .trim();
-      return id === '_' ? {
-        sum: {
-          subject: $(element)
-            .find('th:nth-of-type(2)')
-            .text()
-            .trim(),
-          credit: $(element)
-            .find('th:nth-of-type(3)')
-            .text()
-            .trim(),
-          gpa: $(element)
-            .find('th:nth-of-type(4)')
-            .text()
-            .trim(),
-        },
+          .trim(),
+        credit: $(element)
+          .find('th:nth-of-type(3)')
+          .text()
+          .trim(),
+        gpa: $(element)
+          .find('th:nth-of-type(4)')
+          .text()
+          .trim(),
       } : {
-        [id]: {
-          subject: $(element)
-            .find('td:nth-of-type(3)')
-            .text()
-            .trim(),
-          credit: $(element)
-            .find('td:nth-of-type(4)')
-            .text()
-            .trim(),
-          gpa: $(element)
-            .find('td:nth-of-type(5)')
-            .text()
-            .trim(),
-        },
+        year,
+        semester,
+        subject: $(element)
+          .find('td:nth-of-type(3)')
+          .text()
+          .trim(),
+        credit: $(element)
+          .find('td:nth-of-type(4)')
+          .text()
+          .trim(),
+        gpa: $(element)
+          .find('td:nth-of-type(5)')
+          .text()
+          .trim(),
       };
     }).get();
-    arr.pop();
-    arr.forEach(item => {
-      Object.assign(Obj, item);
+    arr.pop(); // 处理掉最后一行的空数据
+    // 多条件排序
+    arr.sort((a, b) => {
+      if (a.year === b.year) {
+        return a.semester - b.semester;
+      }
+      return a.year - b.year;
     });
-    return Obj;
+    return arr;
   }
 }
 
