@@ -49,7 +49,7 @@ module.exports = appInfo => {
     json(err, ctx) {
       // 从 error 对象上读出各个属性，设置到响应中
       ctx.body = {
-        status_code: err.status,
+        code: err.status,
         err: err.message,
         time: moment.utc().format(),
       };

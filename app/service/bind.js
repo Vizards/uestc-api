@@ -7,7 +7,7 @@ const xiFuLoginUrl = 'https://api.bionictech.cn/app/v4/login';
 class bindService extends Service {
 
   // 登录喜付，成功返回 sid
-  static async xiFuLogin(payload) {
+  async xiFuLogin(payload) {
     const { ctx } = this;
     const options = {
       url: xiFuLoginUrl,
@@ -22,7 +22,7 @@ class bindService extends Service {
       if (JSON.parse(response.body).retcode === '0000') {
         return Promise.resolve(response.headers['set-cookie'][0]);
       }
-      ctx.throw(401, JSON.parse(response.body).retmsg);
+      return ctx.throw(403, JSON.parse(response.body).retmsg);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -56,7 +56,7 @@ class bindService extends Service {
   async xiFu(payload) {
     const { ctx } = this;
     try {
-      const cookies = await this.constructor.xiFuLogin(payload);
+      const cookies = await this.xiFuLogin(payload);
       return await this.saveData(cookies);
     } catch (err) {
       ctx.throw(err);
