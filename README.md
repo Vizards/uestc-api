@@ -4,7 +4,7 @@
 
 > 👉 [https://uestc.ga](https://uestc.ga)
 
-[![node (tag)](https://img.shields.io/node/v/egg.svg?style=flat-square)](https://nodejs.org) ![](https://img.shields.io/travis/Vizards/uestc-api.svg?style=flat-square) ![](https://img.shields.io/codecov/c/github/Vizards/uestc-api.svg?style=flat-square) [![Dependency Status](https://img.shields.io/david/Vizards/uestc-api.svg?style=flat-square)](https://david-dm.org/Vizards/uestc-api) [![](https://img.shields.io/badge/license-GPL-blue.svg?style=flat-square)](https://github.com/Vizards/uestc-api/blob/master/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/Vizards/uestc-api/pulls) [![%e2%9d%a4](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://github.com/Vizards/uestc-api)
+[![node (tag)](https://img.shields.io/node/v/egg.svg?style=flat-square)](https://nodejs.org) [![](https://img.shields.io/travis/Vizards/uestc-api.svg?style=flat-square)](https://travis-ci.org/Vizards/uestc-api) [![](https://img.shields.io/codecov/c/github/Vizards/uestc-api.svg?style=flat-square)](https://codecov.io/gh/Vizards/uestc-api) [![Dependency Status](https://img.shields.io/david/Vizards/uestc-api.svg?style=flat-square)](https://david-dm.org/Vizards/uestc-api) [![](https://img.shields.io/badge/license-GPL-blue.svg?style=flat-square)](https://github.com/Vizards/uestc-api/blob/master/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/Vizards/uestc-api/pulls) [![%e2%9d%a4](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://github.com/Vizards/uestc-api)
 
 ## 介绍
 
