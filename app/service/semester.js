@@ -31,7 +31,8 @@ class semesterService extends Service {
       /* eslint-disable */
       Object.values(eval('(' + res.body + ')').semesters).forEach(item => {
         /* eslint-enable */
-        Object.assign(Obj, { [item[0].schoolYear.substr(0, 4)]: { [item[0].name]: item[0].id, [item[1].name]: item[1].id } });
+        // 处理一个学年内只发布了第一个学期课程 semester_id 的情况
+        item.length === 2 ? Object.assign(Obj, { [item[0].schoolYear.substr(0, 4)]: { [item[0].name]: item[0].id, [item[1].name]: item[1].id } }) : Object.assign(Obj, { [item[0].schoolYear.substr(0, 4)]: { [item[0].name]: item[0].id } });
       });
       return Promise.resolve(Obj[payload.year][payload.semester]);
     } catch (err) {
