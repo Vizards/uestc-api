@@ -12,7 +12,7 @@ class xiFuController extends Controller {
     };
 
     this.electricityTransfer = {
-      room: { type: 'string', required: true, allowEmpty: false, format: /^[0-9]{6}$/ },
+      room: { type: 'string', required: true, allowEmpty: true, format: /^[0-9]{6}$/ },
     };
 
     this.subscribeTransfer = {

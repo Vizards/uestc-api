@@ -30,7 +30,7 @@ class electricityService extends Service {
       if (JSON.parse(response.body).retcode === '000000') {
         return type === 'bind' ? Promise.resolve(response.headers['set-cookie'][0]) : Promise.resolve(JSON.parse(response.body).data);
       }
-      ctx.throw(403, JSON.parse(response.body).retmsg);
+      return ctx.throw(403, JSON.parse(response.body).retmsg);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -54,7 +54,7 @@ class electricityService extends Service {
       if (JSON.parse(response.body).retcode === '000000') {
         return Promise.resolve(sid);
       }
-      ctx.throw(502, JSON.parse(response.body).retmsg);
+      return ctx.throw(403, JSON.parse(response.body).retmsg);
     } catch (err) {
       return Promise.reject(err);
     }
@@ -65,6 +65,9 @@ class electricityService extends Service {
     try {
       const sid = await this.getSid();
       const JSESSIONID = await this.getElectricityFeeBalance(sid, 'bind');
+      if (payload.room === '') {
+        return await this.getElectricityFeeBalance(sid, 'get');
+      }
       const bindRoom = await this.bindRoom(payload, sid, JSESSIONID);
       return await this.getElectricityFeeBalance(bindRoom, 'get');
     } catch (err) {

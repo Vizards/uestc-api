@@ -91,8 +91,21 @@ describe('test/app/controller/xifu.test.js', () => {
     assert(res.body.data.total_consume.match(/^[0-9]+(.[0-9]{2})?$/)[1] !== undefined);
   });
 
-  it('should get electricity', async () => {
+  it('should get electricity with room_id', async () => {
     const body = { room: app.config.xifu.roomId };
+    const res = await app.httpRequest()
+      .post('/api/xifu/electricity')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send(body)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 201);
+    assert(res.body.data.room === app.config.xifu.roomId);
+  });
+
+  it('should get electricity without room_id', async () => {
+    const body = { room: '' };
     const res = await app.httpRequest()
       .post('/api/xifu/electricity')
       .set('Accept', 'application/json')
