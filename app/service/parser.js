@@ -114,7 +114,7 @@ class parserService extends Service {
     const $ = cheerio.load(body);
     return $('.grid > table > tbody > tr').map((i, element) => {
       // 增加从未补考过的用户的总成绩表处理
-      return element.children.length === 17 || 18 ? {
+      return element.children.length === 17 || element.children.length === 18 ? {
         name: $(element)
           .find('td:nth-of-type(4)')
           .text()
