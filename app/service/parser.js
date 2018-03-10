@@ -113,7 +113,8 @@ class parserService extends Service {
   parseGradeData(body) {
     const $ = cheerio.load(body);
     return $('.grid > table > tbody > tr').map((i, element) => {
-      return {
+      // 增加从未补考过的用户的总成绩表处理
+      return element.children.length === 17 || 18 ? {
         name: $(element)
           .find('td:nth-of-type(4)')
           .text()
@@ -140,6 +141,32 @@ class parserService extends Service {
           .trim(),
         gpa: $(element)
           .find('td:nth-of-type(10)')
+          .text()
+          .trim(),
+      } : {
+        name: $(element)
+          .find('td:nth-of-type(4)')
+          .text()
+          .trim(),
+        type: $(element)
+          .find('td:nth-of-type(5)')
+          .text()
+          .trim(),
+        credit: $(element)
+          .find('td:nth-of-type(6)')
+          .text()
+          .trim(),
+        overall: $(element)
+          .find('td:nth-of-type(7)')
+          .text()
+          .trim(),
+        resit: '--',
+        final: $(element)
+          .find('td:nth-of-type(8)')
+          .text()
+          .trim(),
+        gpa: $(element)
+          .find('td:nth-of-type(9)')
           .text()
           .trim(),
       };
