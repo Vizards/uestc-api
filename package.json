@@ -15,6 +15,7 @@
     "egg-validate": "^1.0.0",
     "jpush-sdk": "^3.4.4",
     "moment": "^2.21.0",
+    "request": "^2.85.0",
     "request-promise-native": "^1.0.5",
     "underscore": "^1.8.3"
   },
