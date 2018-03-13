@@ -28,6 +28,16 @@ module.exports = appInfo => {
     masterKey: process.env.LEANCLOUD_MASTERKEY,
   };
 
+  config.mongoose = {
+    url: 'mongodb://127.0.0.1:27017/uestc',
+    options: {
+      useMongoClient: true,
+      autoReconnect: true,
+      reconnectTries: Number.MAX_VALUE,
+      bufferMaxEntries: 0,
+    },
+  }
+
   config.jpush = {
     appId: process.env.JPUSH_APPID,
     masterKey: process.env.JPUSH_MASTERKEY,

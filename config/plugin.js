@@ -8,6 +8,11 @@ exports.leancloud = {
   package: 'egg-leancloud',
 };
 
+exports.mongoose = {
+  enable: true,
+  package: 'egg-mongoose',
+};
+
 exports.validate = {
   enable: true,
   package: 'egg-validate',

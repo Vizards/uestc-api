@@ -7,14 +7,17 @@ const exitUrl = 'http://idas.uestc.edu.cn/authserver/logout?service=/authserver/
 class UserService extends Service {
 
   // 当前用户不存在时, 调用注册
-  static async databaseSignUp(payload, finalCookies, user) {
-    await user.setUsername(payload.username);
-    await user.setPassword(payload.password);
-    await user.signUp(finalCookies);
+  async databaseSignUp(payload, finalCookies) {
+    return await this.ctx.model.User.create({
+      username: payload.username,
+      finalCookies: finalCookies.finalCookies,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
   }
 
   // 用户存在时，更新数据库 Cookies
-  static async databaseUpdateUser(loggedUser, finalCookies) {
+  async databaseUpdateUser(loggedUser, finalCookies) {
     await loggedUser.set('finalCookies', finalCookies.finalCookies);
     return await loggedUser.save('finalCookies', finalCookies.finalCookies, { useMasterKey: true });
   }
@@ -31,9 +34,8 @@ class UserService extends Service {
   async login(payload) {
     const { ctx, service } = this;
     const finalCookies = await ctx.service.idas.login(payload);
-    const user = new ctx.AV.User();
     try {
-      await this.constructor.databaseSignUp(payload, finalCookies, user);
+      await this.databaseSignUp(payload, finalCookies);
       const objectId = await this.genObjectId(payload);
       return { token: await service.actionToken.apply(payload.username, objectId) };
     } catch (err) {
