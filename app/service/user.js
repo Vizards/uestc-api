@@ -18,16 +18,7 @@ class UserService extends Service {
 
   // 用户存在时，更新数据库 Cookies
   async databaseUpdateUser(loggedUser, finalCookies) {
-    await loggedUser.set('finalCookies', finalCookies.finalCookies);
-    return await loggedUser.save('finalCookies', finalCookies.finalCookies, { useMasterKey: true });
-  }
-
-  async genObjectId(payload) {
-    const query = await new this.ctx.AV.Query('_User');
-    await query.equalTo('username', payload.username);
-    return await query.find({ useMasterKey: true }).then(todo => {
-      return todo[0].get('objectId');
-    });
+    return await this.ctx.model.User.update({ username: loggedUser.username }, { updatedAt: Date.now(), finalCookies: finalCookies.finalCookies });
   }
 
   // 尝试登录教务系统，判断当前用户是否已经存在
@@ -36,16 +27,13 @@ class UserService extends Service {
     const finalCookies = await ctx.service.idas.login(payload);
     try {
       await this.databaseSignUp(payload, finalCookies);
-      const objectId = await this.genObjectId(payload);
-      return { token: await service.actionToken.apply(payload.username, objectId) };
+      return { token: await service.actionToken.apply(payload.username) };
     } catch (err) {
-      if (err.code === 202) {
-        const loggedUser = await ctx.AV.User.logIn(payload.username, payload.password);
-        await this.constructor.databaseUpdateUser(loggedUser, finalCookies);
-        const objectId = await this.genObjectId(payload);
-        return { token: await service.actionToken.apply(payload.username, objectId) };
+      if (err.code === 11000) {
+        await this.databaseUpdateUser(payload, finalCookies);
+        return { token: await service.actionToken.apply(payload.username) };
       }
-      ctx.throw(err);
+      return ctx.throw(err);
     }
   }
 
