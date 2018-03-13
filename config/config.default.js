@@ -22,12 +22,6 @@ module.exports = appInfo => {
     match: '/jwt', // optional
   };
 
-  config.leancloud = {
-    appId: process.env.LEANCLOUD_APPID,
-    appKey: process.env.LEANCLOUD_APPKEY,
-    masterKey: process.env.LEANCLOUD_MASTERKEY,
-  };
-
   config.mongoose = {
     url: 'mongodb://127.0.0.1:27017/uestc',
     options: {
@@ -36,7 +30,7 @@ module.exports = appInfo => {
       reconnectTries: Number.MAX_VALUE,
       bufferMaxEntries: 0,
     },
-  }
+  };
 
   config.jpush = {
     appId: process.env.JPUSH_APPID,

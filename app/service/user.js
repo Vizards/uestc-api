@@ -7,7 +7,7 @@ const exitUrl = 'http://idas.uestc.edu.cn/authserver/logout?service=/authserver/
 class UserService extends Service {
 
   // 当前用户不存在时, 调用注册
-  async databaseSignUp(payload, finalCookies) {
+  async databaseSignUpUser(payload, finalCookies) {
     return await this.ctx.model.User.create({
       username: payload.username,
       finalCookies: finalCookies.finalCookies,
@@ -26,7 +26,7 @@ class UserService extends Service {
     const { ctx, service } = this;
     const finalCookies = await ctx.service.idas.login(payload);
     try {
-      await this.databaseSignUp(payload, finalCookies);
+      await this.databaseSignUpUser(payload, finalCookies);
       return { token: await service.actionToken.apply(payload.username) };
     } catch (err) {
       if (err.code === 11000) {
@@ -53,14 +53,12 @@ class UserService extends Service {
   async delete(payload) {
     const { ctx } = this;
     try {
-      const user = await ctx.AV.User.logIn(payload.username, payload.password);
-      const xifu = await new ctx.AV.Query('Xifu');
-      await xifu.equalTo('username', payload.username);
-      const queryResult = await xifu.find({}).then(data => {
-        return data.length === 0 ? null : data[0];
-      });
-      if (queryResult !== null) await queryResult.destroy();
-      await user.destroy({ useMasterKey: true });
+      const finalCookies = await ctx.service.idas.login(payload);
+      await this.databaseUpdateUser(payload, finalCookies);
+      // 稳妥起见，根据 finalCookies 去删除用户
+      await ctx.model.User.remove({ finalCookies: finalCookies.finalCookies });
+      // 根据用户名删除喜付用户
+      await ctx.model.Xifu.remove({ username: payload.username });
       return `已删除账户 ${payload.username}`;
     } catch (err) {
       ctx.throw(err);

@@ -10,7 +10,6 @@
     "egg-alinode": "^2.0.1",
     "egg-cors": "^2.0.0",
     "egg-jwt": "^2.2.1",
-    "egg-leancloud": "^1.0.1",
     "egg-mongoose": "^2.2.0",
     "egg-scripts": "^2.5.1",
     "egg-validate": "^1.0.0",

@@ -5,18 +5,14 @@ const Service = require('egg').Service;
 class subscribeService extends Service {
   async getParams(payload) {
     const { ctx } = this;
-    const query = await new ctx.AV.Query('Xifu');
-    await query.equalTo('username', ctx.locals.user.data.username);
-    const sid = await query.find({}).then(data => {
-      if (data.length !== 0) {
-        return data[0].get('sid');
-      }
-      return false;
+    const username = ctx.locals.user.data.username;
+    const query = ctx.model.Xifu.findOne({ username });
+    await query.select('sid');
+    const sid = await query.exec((err, user) => {
+      if (err) return ctx.throw(404, `未找到用户 ${username} 绑定的喜付账户`);
+      return user.sid;
     });
-    if (sid !== false) {
-      return await Object.assign(payload, { sid }, { username: ctx.locals.user.data.username });
-    }
-    ctx.throw(404, `未找到用户 ${ctx.locals.user.data.username} 绑定的喜付账户`);
+    return await Object.assign(payload, { sid: sid._doc.sid }, { username });
   }
 
   async setCorn(params) {

@@ -9,11 +9,14 @@ class ecardService extends Service {
   // 从数据库获取 sid
   async getSid() {
     const { ctx } = this;
-    const query = await new ctx.AV.Query('Xifu');
-    await query.equalTo('username', ctx.locals.user.data.username);
-    return await query.find({}).then(data => {
-      return data[0].get('sid');
+    const username = ctx.locals.user.data.username;
+    const query = ctx.model.Xifu.findOne({ username });
+    await query.select('sid');
+    const sid = await query.exec((err, user) => {
+      if (err) return ctx.throw(err);
+      return user.sid;
     });
+    return sid._doc.sid;
   }
 
   async getInfo(cookies, type) {
