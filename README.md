@@ -51,6 +51,8 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 $ git clone && npm install
 ```
 
+同时需要在本机安装 MongoDB 并启动
+
 #### 开发环境运行
 
 **将 `config.default.js` 和 `config.unittest.js` 中的密码、Key 等替换成自己的**
