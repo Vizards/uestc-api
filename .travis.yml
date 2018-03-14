@@ -4,6 +4,8 @@ node_js:
   - '8'
 services:
   - mongodb
+before_install:
+  - chmod +x cron.sh
 install:
   - npm i npminstall && npminstall
 script:
