@@ -3,9 +3,9 @@
 // had enabled by egg
 // exports.static = true;
 
-exports.leancloud = {
+exports.mongoose = {
   enable: true,
-  package: 'egg-leancloud',
+  package: 'egg-mongoose',
 };
 
 exports.validate = {

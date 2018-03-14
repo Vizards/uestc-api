@@ -6,6 +6,21 @@ const xiFuLoginUrl = 'https://api.bionictech.cn/app/v4/login';
 
 class bindService extends Service {
 
+  // 当前喜付用户不存在时，调用注册
+  async databaseSignUpXiFu(username, cookies) {
+    return await this.ctx.model.Xifu.create({
+      username,
+      sid: cookies,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+  }
+
+  // 当前喜付用户存在时，更新 sid
+  async databaseUpdateXiFu(username, cookies) {
+    return await this.ctx.model.Xifu.update({ username }, { updatedAt: Date.now(), sid: cookies });
+  }
+
   // 登录喜付，成功返回 sid
   async xiFuLogin(payload) {
     const { ctx } = this;
@@ -30,27 +45,16 @@ class bindService extends Service {
 
   // 将 sid 保存至数据库
   async saveData(cookies) {
-    const { ctx } = this;
-    const _User = await ctx.AV.Object.createWithoutData('_User', ctx.locals.user.data.objectId);
-    let Xifu = await new ctx.AV.Query('Xifu');
-    await Xifu.equalTo('username', ctx.locals.user.data.username);
-    const user = await Xifu.find({}).then(data => { return data; });
-    if (user.length === 0) {
-      // 创建用户
-      Xifu = await ctx.AV.Object.extend('Xifu');
-      const query = new Xifu();
-      await query.set('username', ctx.locals.user.data.username);
-      await query.set('sid', cookies);
-      await query.set('dependent', _User);
-      await query.set();
-      await query.save();
-      return `已将喜付账号与学号 ${ctx.locals.user.data.username} 绑定`;
+    const username = this.ctx.locals.user.data.username;
+    try {
+      await this.databaseSignUpXiFu(username, cookies);
+      return `已将喜付账号与学号 ${username} 绑定`;
+    } catch (err) {
+      if (err.code === 11000) {
+        await this.databaseUpdateXiFu(username, cookies);
+        return `已更新学号 ${username} 的喜付账户`;
+      }
     }
-    // 更新用户 sid
-    await user[0].set('sid', cookies);
-    await user[0].set('dependent', _User);
-    await user[0].save();
-    return `已更新学号 ${ctx.locals.user.data.username} 的喜付账户`;
   }
 
   async xiFu(payload) {
