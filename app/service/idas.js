@@ -50,7 +50,7 @@ class IdasService extends Service {
     const option = await this.ctx.helper.options(redirectParams.redirectUrl);
     try {
       const res = await request(option);
-      return Promise.resolve({ finalCookies: `${res.headers['set-cookie'][0]};${redirectParams.redirectCookies}` });
+      return Promise.resolve({ finalCookies: `${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies}` });
     } catch (err) {
       return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
     }

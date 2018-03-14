@@ -15,7 +15,7 @@ class semesterService extends Service {
     const option = await this.ctx.helper.options(
       `${courseUrl}dataQuery.action`,
       'POST',
-      finalCookies,
+      `semester.id=183;${finalCookies}`,
       {
         tagId: 'semesterBar00000000000Semester',
         dataType: 'semesterCalendar',
