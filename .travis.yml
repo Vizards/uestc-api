@@ -6,7 +6,7 @@ services:
   - mongodb
 before_install:
   - chmod +x cron.sh
-  - echo 'travis' >> /etc/cron.allow
+  - sudo echo 'travis' >> /etc/cron.allow
 install:
   - npm i npminstall && npminstall
 script:
