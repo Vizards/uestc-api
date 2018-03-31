@@ -16,27 +16,37 @@ class subscribeService extends Service {
   }
 
   async setCorn(params) {
-    require('crontab').load((err, crontab) => {
-      if (err !== null) {
-        this.ctx.throw(err);
-      }
-      crontab.remove({ comment: `${params.username}${params.type}` });
-      const command = `cd ${this.config.baseDir} && chmod +x ${this.config.baseDir}/cron.sh && /bin/bash cron.sh "${params.sid.substr(0, 40)}" "${params.type}" "${params.limit}" "${params.platform}" "${params.registration_id}" "${params.username}" "${this.app.config.keys}"`;
-      const job = crontab.create(command, this.app.config.cron, `${params.username}${params.type}`);
-      crontab.save(job);
-    });
-    return '成功添加了定时任务';
+    const { ctx } = this;
+    try {
+      require('crontab').load((err, crontab) => {
+        if (err !== null) {
+          this.ctx.throw(err);
+        }
+        crontab.remove({ comment: `${params.username}${params.type}` });
+        const command = `cd ${this.config.baseDir} && chmod +x ${this.config.baseDir}/cron.sh && /bin/bash cron.sh "${params.sid.substr(0, 40)}" "${params.type}" "${params.limit}" "${params.platform}" "${params.registration_id}" "${params.username}" "${this.app.config.keys}"`;
+        const job = crontab.create(command, this.app.config.cron, `${params.username}${params.type}`);
+        crontab.save(job);
+      });
+      return '成功添加了定时任务';
+    } catch (err) {
+      return ctx.throw(500, '添加定时任务失败');
+    }
   }
 
   async cancelCorn(params) {
-    require('crontab').load((err, crontab) => {
-      if (err !== null) {
-        this.ctx.throw(err);
-      }
-      const job = crontab.remove({ comment: `${params.username}${params.type}` });
-      crontab.save(job);
-    });
-    return '成功取消了定时任务';
+    const { ctx } = this;
+    try {
+      require('crontab').load((err, crontab) => {
+        if (err !== null) {
+          this.ctx.throw(err);
+        }
+        const job = crontab.remove({ comment: `${params.username}${params.type}` });
+        crontab.save(job);
+      });
+      return '成功取消了定时任务';
+    } catch (err) {
+      return ctx.throw(500, '取消定时任务失败');
+    }
   }
 
   async initialize(payload) {
