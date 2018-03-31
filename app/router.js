@@ -24,7 +24,10 @@ module.exports = app => {
   router.post('/api/xifu/unsubscribe', app.jwt, controller.xifu.unsubscribe);
   router.post('/api/xifu/cron', controller.xifu.cron);
   router.get('/api/extra/traffic', controller.extra.traffic);
-  router.get('/api/extra/notification', controller.extra.notification);
-  router.get('/api/extra/contact', controller.extra.contact);
-  router.get('/api/extra/dept', controller.extra.dept);
+  router.get('/api/extra/info', controller.extra.info);
+  router.get('/api/extra/stu', controller.extra.stu);
+  router.get('/api/extra/edu', controller.extra.edu);
+  router.get('/api/extra/communication', controller.extra.communication);
+  router.get('/api/extra/news', controller.extra.news);
+  router.get('/api/extra/room', controller.extra.room);
 };
