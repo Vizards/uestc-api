@@ -54,7 +54,7 @@ class subscribeService extends Service {
       const params = await this.getParams(payload);
       return await this.setCorn(params);
     } catch (err) {
-      this.ctx.throw(err);
+      return this.ctx.throw(err);
     }
   }
 
@@ -63,7 +63,7 @@ class subscribeService extends Service {
       const params = await this.getParams(payload);
       return await this.cancelCorn(params);
     } catch (err) {
-      this.ctx.throw(err);
+      return this.ctx.throw(err);
     }
   }
 }
