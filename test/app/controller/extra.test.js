@@ -53,4 +53,25 @@ describe('test/app/controller/extra.test.js', () => {
       .set('Accept', 'text/html')
       .expect(302);
   });
+
+  it('should get today course info', async () => {
+    await app.httpRequest()
+      .get('/api/extra/today-course')
+      .set('Accept', 'text/html')
+      .expect(302);
+  });
+
+  it('should get search-course page', async () => {
+    await app.httpRequest()
+      .get('/api/extra/search-course')
+      .set('Accept', 'text/html')
+      .expect(302);
+  });
+
+  it('should get search-teacher page', async () => {
+    await app.httpRequest()
+      .get('/api/extra/search-teacher')
+      .set('Accept', 'text/html')
+      .expect(302);
+  });
 });

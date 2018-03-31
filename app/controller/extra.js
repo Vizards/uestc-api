@@ -42,7 +42,25 @@ class ExtraController extends Controller {
   async room() {
     const { ctx } = this;
     ctx.status = 302;
-    ctx.redirect('http://wx.jwc.uestc.edu.cn/wx/SchAbout!toClassroom.action');
+    ctx.redirect('https://jwc.uestc.ga/wx/SchAbout!toClassroom.action');
+  }
+
+  async todayCourse() {
+    const { ctx } = this;
+    ctx.status = 302;
+    ctx.redirect('https://jwc.uestc.ga/wx/CourseAbout!toTodayCourse.action');
+  }
+
+  async searchCourse() {
+    const { ctx } = this;
+    ctx.status = 302;
+    ctx.redirect('https://jwc.uestc.ga/wx/CourseAbout!toSearchCourse.action');
+  }
+
+  async searchTeacher() {
+    const { ctx } = this;
+    ctx.status = 302;
+    ctx.redirect('https://jwc.uestc.ga/wx/SchAbout!toSearchTeach.action');
   }
 }
 

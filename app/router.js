@@ -30,4 +30,7 @@ module.exports = app => {
   router.get('/api/extra/communication', controller.extra.communication);
   router.get('/api/extra/news', controller.extra.news);
   router.get('/api/extra/room', controller.extra.room);
+  router.get('/api/extra/today-course', controller.extra.todayCourse);
+  router.get('/api/extra/search-course', controller.extra.searchCourse);
+  router.get('/api/extra/search-teacher', controller.extra.searchTeacher);
 };
