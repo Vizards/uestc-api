@@ -1,5 +1,8 @@
-body { padding-top: 0 !important }
+body { padding-top: 0 !important; background: #efeff4 !important }
 .attach_nopermission { display: none !important }
+.wp { background: #fff !important }
+.bm { background: #fff !important; border: 0 none !important}
+.plc { background: #fff !important }
 body > div { display: none !important }
 body > #wp { display: block !important; min-width: 100% !important; max-width: 100% !important; width: 100% !important; }
 body > #wp > div { display: none !important }
