@@ -15,7 +15,6 @@ describe('test/app/controller/home.test.js', () => {
   it('should get text response', () => {
     return app.httpRequest()
       .get('/')
-      .expect('hi, uestc')
       .expect(200);
   });
 
