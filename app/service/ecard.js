@@ -12,11 +12,8 @@ class ecardService extends Service {
     const username = ctx.locals.user.data.username;
     const query = ctx.model.Xifu.findOne({ username });
     await query.select('sid');
-    const sid = await query.exec((err, user) => {
-      if (err) return ctx.throw(err);
-      return user.sid;
-    });
-    return sid._doc.sid;
+    const data = await query.exec();
+    return data.sid;
   }
 
   async getInfo(cookies, type) {

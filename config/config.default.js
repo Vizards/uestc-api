@@ -25,7 +25,6 @@ module.exports = appInfo => {
   config.mongoose = {
     url: 'mongodb://127.0.0.1:27017/uestc',
     options: {
-      useMongoClient: true,
       autoReconnect: true,
       reconnectTries: Number.MAX_VALUE,
       bufferMaxEntries: 0,

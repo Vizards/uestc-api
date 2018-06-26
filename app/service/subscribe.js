@@ -8,11 +8,8 @@ class subscribeService extends Service {
     const username = ctx.locals.user.data.username;
     const query = ctx.model.Xifu.findOne({ username });
     await query.select('sid');
-    const sid = await query.exec((err, user) => {
-      if (err) return ctx.throw(404, `未找到用户 ${username} 绑定的喜付账户`);
-      return user.sid;
-    });
-    return await Object.assign(payload, { sid: sid._doc.sid }, { username });
+    const data = await query.exec();
+    return await Object.assign(payload, { sid: data.sid }, { username });
   }
 
   async setCorn(params) {
