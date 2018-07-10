@@ -41,7 +41,12 @@ class IdasService extends Service {
       const res = await request(option);
       return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies: `${res.headers['set-cookie'][1]};${res.headers['set-cookie'][2]}` });
     } catch (err) {
-      return this.ctx.throw(403, '统一身份认证系统鉴权失败');
+      this.ctx.logger.info(err);
+      if (err.message === 'Cannot read property \'1\' of undefined') {
+        await this.login(payload);
+      } else {
+        return this.ctx.throw(403, '统一身份认证系统鉴权失败');
+      }
     }
   }
 
@@ -61,9 +66,11 @@ class IdasService extends Service {
     const { ctx } = this;
     try {
       const params = await this.getParams();
-      const redirectParams = await this.getRedirectUrl(params, payload);
+      const captchaText = await ctx.service.captcha.identify(params.Cookies1);
+      const redirectParams = await this.getRedirectUrl(params, Object.assign(payload, { captchaResponse: captchaText }));
       return await this.genCookies(redirectParams);
     } catch (err) {
+      this.ctx.logger.info(err);
       ctx.throw(err);
     }
   }

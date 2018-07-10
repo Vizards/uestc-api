@@ -13,8 +13,10 @@
     "egg-mongoose": "^3.0.0",
     "egg-scripts": "^2.6.0",
     "egg-validate": "^1.0.0",
+    "gm": "^1.23.1",
     "jpush-sdk": "^3.5.0",
     "moment": "^2.22.2",
+    "node-tesseract": "^0.2.7",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "underscore": "^1.9.1"
