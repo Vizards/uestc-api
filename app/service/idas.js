@@ -35,19 +35,14 @@ class IdasService extends Service {
   }
 
   // 获取重定向地址
-  async getRedirectUrl(params, payload) {
-    const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, { rememberMe: 'on' }));
-    try {
-      const res = await request(option);
-      return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies: `${res.headers['set-cookie'][1]};${res.headers['set-cookie'][2]}` });
-    } catch (err) {
-      this.ctx.logger.info(err);
-      if (err.message === 'Cannot read property \'1\' of undefined') {
-        await this.login(payload);
-      } else {
-        return this.ctx.throw(403, '统一身份认证系统鉴权失败');
-      }
+  async getRedirectUrl(params, payload, captcha) {
+    const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
+    const res = await request(option);
+    await this.ctx.logger.info(res);
+    if (res.headers.location === undefined || res.headers['set-cookie'].length !== 3) {
+      return false;
     }
+    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies: `${res.headers['set-cookie'][1]};${res.headers['set-cookie'][2]}` });
   }
 
   // 目标地址
@@ -64,13 +59,21 @@ class IdasService extends Service {
   // 登录
   async login(payload) {
     const { ctx } = this;
+    // 这里是进行验证码错误自动重试
+    let success = false;
+    let redirectParams = null;
     try {
-      const params = await this.getParams();
-      const captchaText = await ctx.service.captcha.identify(params.Cookies1);
-      const redirectParams = await this.getRedirectUrl(params, Object.assign(payload, { captchaResponse: captchaText }));
+      while (success === false) {
+        const params = await this.getParams();
+        const captchaText = await ctx.service.captcha.identify(params.Cookies1);
+        redirectParams = await this.getRedirectUrl(params, payload, { captchaResponse: captchaText });
+        if (redirectParams) {
+          success = true;
+          break;
+        }
+      }
       return await this.genCookies(redirectParams);
     } catch (err) {
-      this.ctx.logger.info(err);
       ctx.throw(err);
     }
   }
