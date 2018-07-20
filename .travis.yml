@@ -5,6 +5,9 @@ node_js:
 services:
   - mongodb
 before_install:
+  - sudo apt-get install graphicsmagick
+  - sudo apt install tesseract-ocr
+  - sudo apt install libtesseract-dev
   - chmod +x cron.sh
 install:
   - npm i npminstall && npminstall
