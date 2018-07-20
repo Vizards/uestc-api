@@ -19,6 +19,7 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
     - [x] 按学期获取课程成绩信息
     - [x] 获取所有课程成绩信息
     - [x] 获取成绩统计信息
+    - [ ] 获取平时成绩信息
     - [ ] 评教
 
 2. 后勤综合服务
@@ -43,6 +44,12 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 
 ## 快速开始
 
+在开始之前，需要：
+
+1. 已完成初始设置的电子科技大学本科统一身份认证系统账户
+
+2. 已完成学生认证和一卡通、电费房间号绑定的喜付账户
+
 #### 安装
 
 项目框架为 [Egg](https://eggjs.org)，`node` 版本需要高于 `v8.0.0`
@@ -51,7 +58,14 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 $ git clone && npm install
 ```
 
-同时需要在本机安装 MongoDB 并启动
+
+#### 安装全局依赖
+
+- [MongoDB](https://docs.mongodb.com/)
+
+- [GraphicsMagick](http://www.graphicsmagick.org/)：用于处理验证码
+
+- [Tesseract 3.01+](https://github.com/tesseract-ocr/tesseract)：用于识别验证码
 
 #### 开发环境运行
 
@@ -61,7 +75,24 @@ $ git clone && npm install
 $ npm run dev
 ```
 
-浏览器打开 `http://127.0.0.1:7001` 页面出现 “hi, uestc” 字样即为运行成功
+或者可以将参数设置为环境变量，然后运行：
+
+```bash
+$ APP_KEY=xxx JWT_SECRET=xxx JPUSH_APPID=xxx JPUSH_MASTERKEY=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOUNT=xxx YOUR_XIFU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx npm run dev
+```
+
+> 参数说明
+
+参数 | 是否必须 | 说明
+:---: | :---: | :---:
+`APP_KEY` | 是 | 自定义
+`JWT_SECRET` | 是 | 自定义，生成 `jwt-token` 的密钥
+`JPUSH_APPID`<br/>`JPUSH_MASTERKEY` | 是 | 极光推送 `APPID`<br/>极光推送 `MASTERKEY`<br/>（需自行注册）
+`YOUR_STU_NUM`<br/>`YOUR_STU_PASS` | 否（单元测试必须）| 学号<br/>密码
+`YOUR_XIFU_ACCOUNT`<br/>`YOUR_XIFU_PASS`<br/>`YOUR_ROOM_ID` | 否（单元测试必须）| 喜付账户<br/>喜付密码<br/>宿舍房间号
+`ALINODE_APPID`<br/>`ALINODE_SECRET` | 是 | 阿里云 Node.js 性能平台<br/>`APPID`<br/>`SECRET`<br/>（需自行注册）
+
+浏览器打开 `http://127.0.0.1:7001` 页面出现项目主页即为运行成功
 
 #### 单元测试
 

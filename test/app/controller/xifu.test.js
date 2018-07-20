@@ -54,21 +54,6 @@ describe('test/app/controller/xifu.test.js', () => {
     assert(res.body.data === '成功添加了定时任务');
   });
 
-  it('should cancel subscription', async () => {
-    const body = {
-      type: 'ecard',
-    };
-    const res = await app.httpRequest()
-      .post('/api/xifu/unsubscribe')
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${token}`)
-      .send(body)
-      .expect('Content-Type', /json/)
-      .expect(200);
-    assert(res.body.code === 201);
-    assert(res.body.data === '成功取消了定时任务');
-  });
-
   it('should get ecard info', async () => {
     const res = await app.httpRequest()
       .get('/api/xifu/ecard')
@@ -115,5 +100,20 @@ describe('test/app/controller/xifu.test.js', () => {
       .expect(200);
     assert(res.body.code === 201);
     assert(res.body.data.room === app.config.xifu.roomId);
+  });
+
+  it('should cancel subscription', async () => {
+    const body = {
+      type: 'ecard',
+    };
+    const res = await app.httpRequest()
+      .post('/api/xifu/unsubscribe')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send(body)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 201);
+    assert(res.body.data === '成功取消了定时任务');
   });
 });
