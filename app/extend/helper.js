@@ -39,6 +39,7 @@ exports.checkSSO = (url, cookies, Host) => {
       method: 'GET',
       headers: {
         Cookie: cookies,
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
       },
       Host,
       followRedirect: false,
@@ -55,7 +56,10 @@ exports.options = (url, method, Cookie, form) => {
   return {
     url,
     method: method ? method : 'GET',
-    headers: Cookie ? { Cookie } : null,
+    headers: Cookie ? {
+      Cookie,
+      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',
+    } : null,
     form: form ? form : null,
     followRedirect: false,
   };

@@ -40,12 +40,12 @@ class CaptchaService extends Service {
     });
   }
 
-  async identify(cookies) {
+  async identify(cookies, username) {
     try {
-      const newImgPath = await this.disposeImg('/tmp/sdasdas.jpg', cookies);
+      const newImgPath = await this.disposeImg(`/tmp/${username}.jpg`, cookies);
       return await this.recognizeImg(newImgPath);
     } catch (err) {
-      console.error(`识别失败:${err}`);
+      await this.ctx.throw(`识别失败:${err}`);
     }
   }
 }

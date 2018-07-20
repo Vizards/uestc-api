@@ -38,7 +38,6 @@ class IdasService extends Service {
   async getRedirectUrl(params, payload, captcha) {
     const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
     const res = await request(option);
-    await this.ctx.logger.info(res);
     if (res.headers.location === undefined || res.headers['set-cookie'].length !== 3) {
       return false;
     }
@@ -65,7 +64,7 @@ class IdasService extends Service {
     try {
       while (success === false) {
         const params = await this.getParams();
-        const captchaText = await ctx.service.captcha.identify(params.Cookies1);
+        const captchaText = await ctx.service.captcha.identify(params.Cookies1, payload.username);
         redirectParams = await this.getRedirectUrl(params, payload, { captchaResponse: captchaText });
         if (redirectParams) {
           success = true;
