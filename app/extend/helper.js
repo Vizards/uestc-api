@@ -43,6 +43,7 @@ exports.checkSSO = (url, cookies, Host) => {
       },
       Host,
       followRedirect: false,
+      proxy: process.env.PROXY || null,
     };
     const res = request(option);
     return Promise.resolve(res);
@@ -62,6 +63,7 @@ exports.options = (url, method, Cookie, form) => {
     } : null,
     form: form ? form : null,
     followRedirect: false,
+    proxy: process.env.PROXY || null,
   };
 };
 

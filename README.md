@@ -78,7 +78,7 @@ $ npm run dev
 或者可以将参数设置为环境变量，然后运行：
 
 ```bash
-$ APP_KEY=xxx JWT_SECRET=xxx JPUSH_APPID=xxx JPUSH_MASTERKEY=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOUNT=xxx YOUR_XIFU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx npm run dev
+$ APP_KEY=xxx JWT_SECRET=xxx JPUSH_APPID=xxx JPUSH_MASTERKEY=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOUNT=xxx YOUR_XIFU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx PROXY=YOUR_HTTP_PROXY_URL npm run dev
 ```
 
 > 参数说明
@@ -91,6 +91,8 @@ $ APP_KEY=xxx JWT_SECRET=xxx JPUSH_APPID=xxx JPUSH_MASTERKEY=xxx YOUR_STU_NUM=xx
 `YOUR_STU_NUM`<br/>`YOUR_STU_PASS` | 否（单元测试必须）| 学号<br/>密码
 `YOUR_XIFU_ACCOUNT`<br/>`YOUR_XIFU_PASS`<br/>`YOUR_ROOM_ID` | 否（单元测试必须）| 喜付账户<br/>喜付密码<br/>宿舍房间号
 `ALINODE_APPID`<br/>`ALINODE_SECRET` | 是 | 阿里云 Node.js 性能平台<br/>`APPID`<br/>`SECRET`<br/>（需自行注册）
+`PROXY` | 否 | HTTP(S) 代理服务器地址和端口 <br> 格式 `http(s)://url:port`
+
 
 浏览器打开 `http://127.0.0.1:7001` 页面出现项目主页即为运行成功
 

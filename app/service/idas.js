@@ -38,6 +38,9 @@ class IdasService extends Service {
   async getRedirectUrl(params, payload, captcha) {
     const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
     const res = await request(option);
+    if (res.body.includes('您提供的用户名或者密码有误')) {
+      return this.ctx.throw(403, '您提供的用户名或者密码有误');
+    }
     if (res.headers.location === undefined || res.headers['set-cookie'].length !== 3) {
       return false;
     }
