@@ -44,15 +44,15 @@ class IdasService extends Service {
     if (res.headers.location === undefined || res.headers['set-cookie'].length !== 3) {
       return false;
     }
-    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies: `${res.headers['set-cookie'][1]};${res.headers['set-cookie'][2]}` });
+    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][1], redirectCookies2: res.headers['set-cookie'][2] });
   }
 
   // 目标地址
   async genCookies(redirectParams) {
-    const option = await this.ctx.helper.options(redirectParams.redirectUrl);
+    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JGKEMFNOECBP;${redirectParams.redirectCookies1}`);
     try {
       const res = await request(option);
-      return Promise.resolve({ finalCookies: `${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies}` });
+      return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
     } catch (err) {
       return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
     }
