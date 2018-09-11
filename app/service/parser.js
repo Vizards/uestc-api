@@ -173,6 +173,31 @@ class parserService extends Service {
     }).get();
   }
 
+  parseUsualGradeData(body) {
+    const $ = cheerio.load(body);
+    const tr = $('.grid > table > tbody > tr');
+    return tr.length === 1 ? [] : tr.map((i, element) => {
+      return {
+        name: $(element)
+          .find('td:nth-of-type(4)')
+          .text()
+          .trim(),
+        type: $(element)
+          .find('td:nth-of-type(5)')
+          .text()
+          .trim(),
+        credit: $(element)
+          .find('td:nth-of-type(6)')
+          .text()
+          .trim(),
+        grade: $(element)
+          .find('td:nth-of-type(7)')
+          .text()
+          .trim(),
+      };
+    }).get();
+  }
+
   parseGPAData(body) {
     const $ = cheerio.load(body);
     const arr = $('body > .gridtable > tbody > tr').map((i, element) => {

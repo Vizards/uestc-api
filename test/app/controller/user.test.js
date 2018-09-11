@@ -71,6 +71,23 @@ describe('test/app/controller/user.test.js', () => {
     assert(res.body.data[0].hasOwnProperty('gpa') === true);
   });
 
+  it('should get semester usual grade', async () => {
+    const body = {
+      year: app.config.user.year,
+      semester: app.config.user.semester,
+    };
+    const res = await app.httpRequest()
+      .post('/api/user/usualGrade')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send(body)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 201);
+    assert(res.body.data.length !== 0);
+    assert(res.body.data[0].hasOwnProperty('grade') === true);
+  });
+
   it('should get all grade', async () => {
     const res = await app.httpRequest()
       .get('/api/user/grade')

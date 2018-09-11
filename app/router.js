@@ -15,6 +15,7 @@ module.exports = app => {
   router.post('/api/user/exam', app.jwt, cookiesHandler, ssoHandler, controller.user.exam);
   router.post('/api/user/grade', app.jwt, cookiesHandler, ssoHandler, controller.user.grade);
   router.get('/api/user/grade', app.jwt, cookiesHandler, ssoHandler, controller.user.allGrade);
+  router.post('/api/user/usualGrade', app.jwt, cookiesHandler, ssoHandler, controller.user.usualGrade);
   router.get('/api/user/gpa', app.jwt, cookiesHandler, ssoHandler, controller.user.gpa);
   router.post('/api/xifu/bind', app.jwt, controller.xifu.bindXiFu);
   router.get('/api/xifu/ecard', app.jwt, controller.xifu.ecard);

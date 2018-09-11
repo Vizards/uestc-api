@@ -81,6 +81,14 @@ class UserController extends Controller {
     ctx.helper.getSuccess({ ctx, res });
   }
 
+  async usualGrade() {
+    const { ctx, service } = this;
+    ctx.validate(this.gradeTransfer);
+    const payload = ctx.request.body || {};
+    const res = await service.grade.usualGrade(payload);
+    ctx.helper.postSuccess({ ctx, res });
+  }
+
   // 获取 GPA 统计信息
   async gpa() {
     const { ctx, service } = this;

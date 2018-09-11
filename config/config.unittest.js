@@ -5,7 +5,7 @@ module.exports = {
     username: process.env.YOUR_STU_NUM,
     password: process.env.YOUR_STU_PASS,
     year: '2017',
-    semester: '1',
+    semester: '2',
   },
 
   xifu: {

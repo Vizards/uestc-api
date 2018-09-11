@@ -11,6 +11,7 @@ const Service = require('egg').Service;
 const request = require('request-promise-native').defaults({ simple: false, resolveWithFullResponse: true });
 const _ = require('underscore');
 const gradeUrl = 'http://eams.uestc.edu.cn/eams/teach/grade/course/person';
+const allGradeUrl = 'http://eams.uestc.edu.cn/eams/teach/grade/usual/usual-grade-std!search.action';
 
 class gradeService extends Service {
   static gradeOptions(finalCookies, semesterId) {
@@ -64,6 +65,26 @@ class gradeService extends Service {
       return await service.parser.parseGradeData(gradeData).map(item => {
         return _.omit(item, 'gpa');
       });
+    } catch (err) {
+      ctx.throw(err);
+    }
+  }
+
+  async usualGrade(payload) {
+    const { ctx, service } = this;
+    try {
+      const finalCookies = ctx.locals.user.data.cookies;
+      const semesterId = await service.semester.getSemesterId(payload, finalCookies);
+      const usualGradeOptions = this.ctx.helper.options(
+        allGradeUrl,
+        'POST',
+        `semester.id=183;${finalCookies}`,
+        {
+          'semester.id': semesterId,
+        }
+      );
+      const usualGradeData = await this.getData(usualGradeOptions);
+      return await service.parser.parseUsualGradeData(usualGradeData);
     } catch (err) {
       ctx.throw(err);
     }

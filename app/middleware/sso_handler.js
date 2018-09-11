@@ -4,7 +4,7 @@ module.exports = () => {
   return async (ctx, next) => {
     // 封装请求，遇到 SSO 时只需连续请求 http://eams.uestc.edu.cn/eams/home.action 即可
     let cookies = ctx.locals.user.data.cookies;
-    ctx.logger.info(cookies);
+    // ctx.logger.info(cookies);
     const check = () => ctx.helper.checkSSO('http://eams.uestc.edu.cn/eams/home.action', cookies.substr(0, 229), 'eams.uestc.edu.cn');
     try {
       let res = await check();
@@ -35,7 +35,7 @@ module.exports = () => {
 
       while (res.body === '' && res.headers.location.includes('ticket')) {
         res = await ctx.helper.checkSSO(res.headers.location, cookies, 'eams.uestc.edu.cn');
-        ctx.logger.info(res);
+        // ctx.logger.info(res);
         if (res.headers['set-cookie'].length === 2) {
           cookies = `${cookies.substr(0, 39)}semester.id=183;${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]};`;
         }
