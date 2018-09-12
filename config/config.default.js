@@ -28,15 +28,9 @@ module.exports = appInfo => {
       autoReconnect: true,
       reconnectTries: Number.MAX_VALUE,
       bufferMaxEntries: 0,
+      useNewUrlParser: true,
     },
   };
-
-  config.jpush = {
-    appId: process.env.JPUSH_APPID,
-    masterKey: process.env.JPUSH_MASTERKEY,
-  };
-
-  config.cron = '*/1 * * * *';
 
   config.alinode = {
     // 从 `Node.js 性能平台` 获取对应的接入参数

@@ -36,24 +36,6 @@ describe('test/app/controller/xifu.test.js', () => {
     assert(res.body.data === `已更新学号 ${app.config.user.username} 的喜付账户` || `已将喜付账号与学号 ${app.config.user.username} 绑定`);
   });
 
-  it('should set subscription', async () => {
-    const body = {
-      type: 'ecard',
-      limit: 10,
-      platform: 'ios',
-      registration_id: '123123123123',
-    };
-    const res = await app.httpRequest()
-      .post('/api/xifu/subscribe')
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${token}`)
-      .send(body)
-      .expect('Content-Type', /json/)
-      .expect(200);
-    assert(res.body.code === 201);
-    assert(res.body.data === '成功添加了定时任务');
-  });
-
   it('should get ecard info', async () => {
     const res = await app.httpRequest()
       .get('/api/xifu/ecard')
@@ -100,20 +82,5 @@ describe('test/app/controller/xifu.test.js', () => {
       .expect(200);
     assert(res.body.code === 201);
     assert(res.body.data.room === app.config.xifu.roomId);
-  });
-
-  it('should cancel subscription', async () => {
-    const body = {
-      type: 'ecard',
-    };
-    const res = await app.httpRequest()
-      .post('/api/xifu/unsubscribe')
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${token}`)
-      .send(body)
-      .expect('Content-Type', /json/)
-      .expect(200);
-    assert(res.body.code === 201);
-    assert(res.body.data === '成功取消了定时任务');
   });
 });

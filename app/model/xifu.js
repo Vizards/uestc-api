@@ -2,6 +2,7 @@
 
 module.exports = app => {
   const mongoose = app.mongoose;
+  mongoose.set('useCreateIndex', true);
   const XiFuSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     sid: { type: String, unique: true, required: true },

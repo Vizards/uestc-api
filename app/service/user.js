@@ -18,7 +18,7 @@ class UserService extends Service {
 
   // 用户存在时，更新数据库 Cookies
   async databaseUpdateUser(loggedUser, finalCookies) {
-    return await this.ctx.model.User.update({ username: loggedUser.username }, { updatedAt: Date.now(), finalCookies: finalCookies.finalCookies });
+    return await this.ctx.model.User.updateOne({ username: loggedUser.username }, { updatedAt: Date.now(), finalCookies: finalCookies.finalCookies });
   }
 
   // 尝试登录教务系统，判断当前用户是否已经存在

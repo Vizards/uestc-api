@@ -21,9 +21,6 @@ module.exports = app => {
   router.get('/api/xifu/ecard', app.jwt, controller.xifu.ecard);
   router.get('/api/xifu/bill', app.jwt, controller.xifu.bill);
   router.post('/api/xifu/electricity', app.jwt, controller.xifu.electricity);
-  router.post('/api/xifu/subscribe', app.jwt, controller.xifu.subscribe);
-  router.post('/api/xifu/unsubscribe', app.jwt, controller.xifu.unsubscribe);
-  router.post('/api/xifu/cron', controller.xifu.cron);
   router.get('/api/extra/traffic', controller.extra.traffic);
   router.get('/api/extra/info', controller.extra.info);
   router.get('/api/extra/stu', controller.extra.stu);

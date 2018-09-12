@@ -8,7 +8,6 @@ before_install:
   - sudo apt-get install graphicsmagick
   - sudo apt-get install tesseract-ocr
   - sudo apt-get install libtesseract-dev
-  - chmod +x cron.sh
 install:
   - npm i npminstall && npminstall
 script:

@@ -2,6 +2,7 @@
 
 module.exports = app => {
   const mongoose = app.mongoose;
+  mongoose.set('useCreateIndex', true);
   const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     finalCookies: { type: String, unique: true, required: true },

@@ -19,7 +19,7 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
     - [x] 按学期获取课程成绩信息
     - [x] 获取所有课程成绩信息
     - [x] 获取成绩统计信息
-    - [ ] 获取平时成绩信息
+    - [x] 获取平时成绩信息
     - [ ] 评教
 
 2. 后勤综合服务
@@ -78,7 +78,7 @@ $ npm run dev
 或者可以将参数设置为环境变量，然后运行：
 
 ```bash
-$ APP_KEY=xxx JWT_SECRET=xxx JPUSH_APPID=xxx JPUSH_MASTERKEY=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOUNT=xxx YOUR_XIFU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx PROXY=YOUR_HTTP_PROXY_URL npm run dev
+$ APP_KEY=xxx JWT_SECRET=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOUNT=xxx YOUR_XIFU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx PROXY=YOUR_HTTP_PROXY_URL npm run dev
 ```
 
 > 参数说明
@@ -87,7 +87,6 @@ $ APP_KEY=xxx JWT_SECRET=xxx JPUSH_APPID=xxx JPUSH_MASTERKEY=xxx YOUR_STU_NUM=xx
 :---: | :---: | :---:
 `APP_KEY` | 是 | 自定义
 `JWT_SECRET` | 是 | 自定义，生成 `jwt-token` 的密钥
-`JPUSH_APPID`<br/>`JPUSH_MASTERKEY` | 是 | 极光推送 `APPID`<br/>极光推送 `MASTERKEY`<br/>（需自行注册）
 `YOUR_STU_NUM`<br/>`YOUR_STU_PASS` | 否（单元测试必须）| 学号<br/>密码
 `YOUR_XIFU_ACCOUNT`<br/>`YOUR_XIFU_PASS`<br/>`YOUR_ROOM_ID` | 否（单元测试必须）| 喜付账户<br/>喜付密码<br/>宿舍房间号
 `ALINODE_APPID`<br/>`ALINODE_SECRET` | 是 | 阿里云 Node.js 性能平台<br/>`APPID`<br/>`SECRET`<br/>（需自行注册）

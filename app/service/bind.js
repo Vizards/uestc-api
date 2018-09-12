@@ -18,7 +18,7 @@ class bindService extends Service {
 
   // 当前喜付用户存在时，更新 sid
   async databaseUpdateXiFu(username, cookies) {
-    return await this.ctx.model.Xifu.update({ username }, { updatedAt: Date.now(), sid: cookies });
+    return await this.ctx.model.Xifu.updateOne({ username }, { updatedAt: Date.now(), sid: cookies });
   }
 
   // 登录喜付，成功返回 sid

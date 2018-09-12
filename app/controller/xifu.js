@@ -14,27 +14,6 @@ class xiFuController extends Controller {
     this.electricityTransfer = {
       room: { type: 'string', required: true, allowEmpty: true, format: /^[0-9]{6}$/ },
     };
-
-    this.subscribeTransfer = {
-      type: { type: 'enum', required: true, allowEmpty: false, values: [ 'ecard', 'electricity' ] },
-      limit: { type: 'number', required: true, allowEmpty: false },
-      platform: { type: 'enum', required: true, allowEmpty: false, values: [ 'ios', 'android' ] },
-      registration_id: { type: 'string', required: true, allowEmpty: false },
-    };
-
-    this.unSubscribeTransfer = {
-      type: { type: 'enum', required: true, allowEmpty: false, values: [ 'ecard', 'electricity' ] },
-    };
-
-    this.cronTransfer = {
-      sid: { type: 'string', required: true, allowEmpty: false },
-      type: { type: 'enum', required: true, allowEmpty: false, values: [ 'ecard', 'electricity' ] },
-      limit: { type: 'string', required: true, allowEmpty: false },
-      platform: { type: 'enum', required: true, allowEmpty: false, values: [ 'ios', 'android' ] },
-      registration_id: { type: 'string', required: true, allowEmpty: false },
-      username: { type: 'string', required: true, allowEmpty: false, format: /^[0-9]{13}$/ },
-      cronMasterKey: { type: 'string', required: true, allowEmpty: false },
-    };
   }
 
   // 绑定喜付账号
@@ -66,33 +45,6 @@ class xiFuController extends Controller {
     ctx.validate(this.electricityTransfer);
     const payload = ctx.request.body || {};
     const res = await service.electricity.query(payload);
-    ctx.helper.postSuccess({ ctx, res });
-  }
-
-  // 设置余额监控
-  async subscribe() {
-    const { ctx, service } = this;
-    ctx.validate(this.subscribeTransfer);
-    const payload = ctx.request.body || {};
-    const res = await service.subscribe.initialize(payload);
-    ctx.helper.postSuccess({ ctx, res });
-  }
-
-  // 取消余额监控
-  async unsubscribe() {
-    const { ctx, service } = this;
-    ctx.validate(this.unSubscribeTransfer);
-    const payload = ctx.request.body || {};
-    const res = await service.subscribe.cancel(payload);
-    ctx.helper.postSuccess({ ctx, res });
-  }
-
-  // 定时任务接口
-  async cron() {
-    const { ctx, service } = this;
-    ctx.validate(this.cronTransfer);
-    const payload = ctx.request.body || {};
-    const res = await service.cron.run(payload);
     ctx.helper.postSuccess({ ctx, res });
   }
 }
