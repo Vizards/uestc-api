@@ -59,7 +59,7 @@ class IdasService extends Service {
         const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JHKEMFNOECBP;${redirectParams.redirectCookies1}`);
         const res = await request(option);
         return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
-      } catch(err) {
+      } catch (err) {
         return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
       }
     }
