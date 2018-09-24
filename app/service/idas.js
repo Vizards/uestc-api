@@ -49,12 +49,19 @@ class IdasService extends Service {
 
   // 目标地址
   async genCookies(redirectParams) {
-    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JGKEMFNOECBP;${redirectParams.redirectCookies1}`);
+    // JGKE or JHKE or JIKE
     try {
+      const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JGKEMFNOECBP;${redirectParams.redirectCookies1}`);
       const res = await request(option);
       return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
     } catch (err) {
-      return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
+      try {
+        const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JHKEMFNOECBP;${redirectParams.redirectCookies1}`);
+        const res = await request(option);
+        return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
+      } catch(err) {
+        return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
+      }
     }
   }
 
