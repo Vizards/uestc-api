@@ -253,6 +253,37 @@ class parserService extends Service {
     });
     return arr;
   }
+
+  parseProfile(body) {
+    const $ = cheerio.load(body);
+    const tr = $('#studentInfoTb > tbody > tr');
+    const obj = {};
+    const attrArr = [
+      [],
+      [ 'stuID', 'stuName' ],
+      [ 'enName', 'gender' ],
+      [ 'grade', 'plan' ],
+      [ 'project', 'level' ],
+      [ 'category', 'department' ],
+      [ 'profession', 'direction' ],
+      [ '', '' ],
+      [ 'enrollDate', 'graduateDate' ],
+      [ 'manager', 'waysOfLearning' ],
+      [ 'eduForm', 'status' ],
+      [ 'registered', 'atSchool' ],
+      [ 'class', 'campus' ],
+    ];
+    tr.map((i, element) => {
+      if (i !== 0 && element.children.length !== 1) {
+        obj[attrArr[i][0]] = $(element).find('td:nth-of-type(2)').text()
+          .trim();
+        obj[attrArr[i][1]] = $(element).find('td:nth-of-type(4)').text()
+          .trim();
+      }
+      return false;
+    }).get();
+    return obj;
+  }
 }
 
 module.exports = parserService;

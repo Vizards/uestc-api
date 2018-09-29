@@ -47,6 +47,12 @@ class UserController extends Controller {
     ctx.helper.postSuccess({ ctx, res });
   }
 
+  async profile() {
+    const { ctx, service } = this;
+    const res = await service.profile.get();
+    ctx.helper.getSuccess({ ctx, res });
+  }
+
   // 获取课程信息
   async course() {
     const { ctx, service } = this;

@@ -20,6 +20,18 @@ describe('test/app/controller/user.test.js', () => {
     token = res.body.data.token;
   });
 
+  it('should get profile', async () => {
+    const res = await app.httpRequest()
+      .get('/api/user/profile')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 200);
+    assert(res.body.data.length !== 0);
+    assert(res.body.data.stuID === app.config.user.username);
+  });
+
   it('should get course', async () => {
     const body = {
       year: app.config.user.year,
