@@ -32,6 +32,21 @@ describe('test/app/controller/user.test.js', () => {
     assert(res.body.data.stuID === app.config.user.username);
   });
 
+  it('should set avatar', async () => {
+    const body = {
+      url: 'https://i.loli.net/2018/09/30/5bafc0ece3bd2.png',
+    };
+    const res = await app.httpRequest()
+      .post('/api/user/avatar')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .send(body)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 201);
+    assert(res.body.data === 'set success');
+  });
+
   it('should get course', async () => {
     const body = {
       year: app.config.user.year,

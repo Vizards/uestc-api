@@ -16,6 +16,10 @@ class UserController extends Controller {
       year: { type: 'string', required: true, allowEmpty: false, format: /^[0-9]{4}$/ },
       semester: { type: 'string', required: true, allowEmpty: false, format: /[1|2]$/ },
     };
+
+    this.avatarTransfer = {
+      url: { type: 'string', required: true, allowEmpty: false, format: /https:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/ },
+    };
   }
 
   // 用户登录/创建
@@ -47,10 +51,20 @@ class UserController extends Controller {
     ctx.helper.postSuccess({ ctx, res });
   }
 
+  // 获取个人信息
   async profile() {
     const { ctx, service } = this;
     const res = await service.profile.get();
     ctx.helper.getSuccess({ ctx, res });
+  }
+
+  // 修改头像
+  async avatar() {
+    const { ctx, service } = this;
+    ctx.validate(this.avatarTransfer);
+    const payload = ctx.request.body || {};
+    const res = await service.profile.setAvatar(payload);
+    ctx.helper.postSuccess({ ctx, res });
   }
 
   // 获取课程信息
