@@ -5,19 +5,23 @@ const request = require('request-promise-native').defaults({ simple: false, reso
 const profileUrl = 'http://eams.uestc.edu.cn/eams/stdDetail.action';
 
 class ProfileService extends Service {
-  async getAvatar() {
+  async queryProfile() {
     const { ctx } = this;
     const username = ctx.locals.user.data.username;
     const query = ctx.model.User.findOne({ username });
-    await query.select('avatar');
+    await query.select('avatarUrl nickName bio');
     const data = await query.exec();
-    return data.avatar;
+    return {
+      avatarUrl: data._doc.avatarUrl,
+      nickName: data._doc.nickName,
+      bio: data._doc.bio,
+    };
   }
 
-  async setAvatar(avatar) {
+  async set(payload) {
     const { ctx } = this;
     const username = ctx.locals.user.data.username;
-    await this.ctx.model.User.updateOne({ username }, { updatedAt: Date.now(), avatar: avatar.url });
+    await this.ctx.model.User.updateOne({ username }, Object.assign(payload, { updatedAt: Date.now() }));
     return 'set success';
   }
 
@@ -26,11 +30,11 @@ class ProfileService extends Service {
     const options = await ctx.helper.options(profileUrl, 'GET', ctx.locals.user.data.cookies);
     try {
       const res = await request(options);
-      const avatar = await this.getAvatar();
-      const profile = await ctx.service.parser.parseProfile(res.body);
-      return Object.assign(profile, { avatar: avatar ? avatar : '未设置' });
+      const profile = await this.queryProfile();
+      const parsedProfile = await ctx.service.parser.parseProfile(res.body);
+      return Object.assign(profile, parsedProfile);
     } catch (err) {
-      ctx.throw(403, '个人信息获取失败');
+      ctx.throw(403, '拉取学籍信息失败');
     }
   }
 }

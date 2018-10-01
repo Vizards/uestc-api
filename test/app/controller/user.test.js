@@ -32,12 +32,12 @@ describe('test/app/controller/user.test.js', () => {
     assert(res.body.data.stuID === app.config.user.username);
   });
 
-  it('should set avatar', async () => {
+  it('should set profile', async () => {
     const body = {
-      url: 'https://i.loli.net/2018/09/30/5bafc0ece3bd2.png',
+      nickName: 'Vizards',
     };
     const res = await app.httpRequest()
-      .post('/api/user/avatar')
+      .post('/api/user/profile')
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`)
       .send(body)

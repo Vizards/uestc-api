@@ -12,7 +12,7 @@ module.exports = app => {
   router.post('/api/user/exit', app.jwt, controller.user.exit);
   router.post('/api/user/delete', controller.user.delete);
   router.get('/api/user/profile', app.jwt, cookiesHandler, ssoHandler, controller.user.profile);
-  router.post('/api/user/avatar', app.jwt, cookiesHandler, ssoHandler, controller.user.avatar);
+  router.post('/api/user/profile', app.jwt, cookiesHandler, ssoHandler, controller.user.setProfile);
   router.post('/api/user/course', app.jwt, cookiesHandler, ssoHandler, controller.user.course);
   router.post('/api/user/exam', app.jwt, cookiesHandler, ssoHandler, controller.user.exam);
   router.post('/api/user/grade', app.jwt, cookiesHandler, ssoHandler, controller.user.grade);

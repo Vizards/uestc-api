@@ -17,8 +17,10 @@ class UserController extends Controller {
       semester: { type: 'string', required: true, allowEmpty: false, format: /[1|2]$/ },
     };
 
-    this.avatarTransfer = {
-      url: { type: 'string', required: true, allowEmpty: false, format: /https:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/ },
+    this.profileTransfer = {
+      avatarUrl: { type: 'string', required: false, allowEmpty: false, format: /https:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/ },
+      nickName: { type: 'string', required: false, allowEmpty: false, max: 50 },
+      bio: { type: 'string', required: false, allowEmpty: false, max: 50 },
     };
   }
 
@@ -59,11 +61,11 @@ class UserController extends Controller {
   }
 
   // 修改头像
-  async avatar() {
+  async setProfile() {
     const { ctx, service } = this;
-    ctx.validate(this.avatarTransfer);
+    ctx.validate(this.profileTransfer);
     const payload = ctx.request.body || {};
-    const res = await service.profile.setAvatar(payload);
+    const res = await service.profile.set(payload);
     ctx.helper.postSuccess({ ctx, res });
   }
 

@@ -6,7 +6,9 @@ module.exports = app => {
   const UserSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     finalCookies: { type: String, unique: true, required: true },
-    avatar: { type: String, unique: false, required: false },
+    avatarUrl: { type: String, unique: false, required: false },
+    nickName: { type: String, unique: false, required: false },
+    bio: { type: String, unique: false, required: false },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   });
