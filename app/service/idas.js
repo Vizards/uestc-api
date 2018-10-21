@@ -35,16 +35,18 @@ class IdasService extends Service {
   }
 
   // 获取重定向地址
-  async getRedirectUrl(params, payload, captcha) {
-    const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
+  // async getRedirectUrl(params, payload, captcha) {
+  async getRedirectUrl(params, payload) {
+    // const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
+    const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, { rememberMe: 'on' }));
     const res = await request(option);
     if (res.body.includes('您提供的用户名或者密码有误')) {
       return this.ctx.throw(403, '您提供的用户名或者密码有误');
     }
-    if (res.headers.location === undefined || res.headers['set-cookie'].length !== 3) {
+    if (res.headers.location === undefined || res.headers['set-cookie'].length !== 5) {
       return false;
     }
-    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][1], redirectCookies2: res.headers['set-cookie'][2] });
+    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][3], redirectCookies2: res.headers['set-cookie'][4] });
   }
 
   // 目标地址
@@ -69,18 +71,20 @@ class IdasService extends Service {
   async login(payload) {
     const { ctx } = this;
     // 这里是进行验证码错误自动重试
-    let success = false;
-    let redirectParams = null;
+    // let success = false;
+    // let redirectParams = null;
     try {
-      while (success === false) {
-        const params = await this.getParams();
-        const captchaText = await ctx.service.captcha.identify(params.Cookies1, payload.username);
-        redirectParams = await this.getRedirectUrl(params, payload, { captchaResponse: captchaText });
-        if (redirectParams) {
-          success = true;
-          break;
-        }
-      }
+      // while (success === false) {
+      //   const params = await this.getParams();
+      //   const captchaText = await ctx.service.captcha.identify(params.Cookies1, payload.username);
+      //   redirectParams = await this.getRedirectUrl(params, payload, { captchaResponse: captchaText });
+      //   if (redirectParams) {
+      //     success = true;
+      //     break;
+      //   }
+      // }
+      const params = await this.getParams();
+      const redirectParams = await this.getRedirectUrl(params, payload);
       return await this.genCookies(redirectParams);
     } catch (err) {
       ctx.throw(err);
