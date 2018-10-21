@@ -1,5 +1,5 @@
 
-<p align="center"><img src="https://o9sapbwjn.qnssl.com/2018-02-14-125437.jpg" width="100" alt="UESTC"/></p>
+<p align="center"><img src="https://ipic.vizards.cc/2018-02-14-125437.jpg" width="100" alt="UESTC"/></p>
 <h1 align="center">UESTC-API</h1>
 
 > 👉 [https://uestc.ga](https://uestc.ga)
