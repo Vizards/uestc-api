@@ -17,7 +17,8 @@ class IdasService extends Service {
   // 获取登录参数和 Cookie
   async getParams() {
     try {
-      const res = await request(loginUrl);
+      const option = await this.ctx.helper.options(loginUrl);
+      const res = await request(option);
       const $ = await cheerio.load(res.body);
       const names = await $('#casLoginForm > input').map((i, el) => {
         return $(el).attr('name');
@@ -49,20 +50,26 @@ class IdasService extends Service {
     return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][3], redirectCookies2: res.headers['set-cookie'][4] });
   }
 
+  async returnCookies(redirectParams, keywords) {
+    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=J${keywords}KEMFNOECBP;${redirectParams.redirectCookies1}`);
+    const res = await request(option);
+    return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
+  }
+
   // 目标地址
   async genCookies(redirectParams) {
     // JGKE or JHKE or JIKE
     try {
-      const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JGKEMFNOECBP;${redirectParams.redirectCookies1}`);
-      const res = await request(option);
-      return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
+      return this.returnCookies(redirectParams, 'G');
     } catch (err) {
       try {
-        const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=JHKEMFNOECBP;${redirectParams.redirectCookies1}`);
-        const res = await request(option);
-        return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
+        return this.returnCookies(redirectParams, 'H');
       } catch (err) {
-        return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
+        try {
+          return this.returnCookies(redirectParams, 'I');
+        } catch (err) {
+          return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
+        }
       }
     }
   }
