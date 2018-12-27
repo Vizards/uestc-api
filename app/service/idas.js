@@ -44,16 +44,16 @@ class IdasService extends Service {
     if (res.body.includes('您提供的用户名或者密码有误')) {
       return this.ctx.throw(403, '您提供的用户名或者密码有误');
     }
-    if (res.headers.location === undefined || res.headers['set-cookie'].length !== 5) {
+    if (res.headers.location === undefined) {
       return false;
     }
-    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][3], redirectCookies2: res.headers['set-cookie'][4] });
+    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][0], redirectCookies2: res.headers['set-cookie'][1], redirectCookies3: res.headers['set-cookie'][2] });
   }
 
   async returnCookies(redirectParams, keywords) {
-    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=J${keywords}KEMFNOECBP;${redirectParams.redirectCookies1}`);
+    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=J${keywords}KEMFNOECBP;${redirectParams.redirectCookies1};${redirectParams.redirectCookies2};${redirectParams.redirectCookies3}`);
     const res = await request(option);
-    return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2}` });
+    return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2};${redirectParams.redirectCookies3}` });
   }
 
   // 目标地址

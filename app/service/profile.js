@@ -22,7 +22,7 @@ class ProfileService extends Service {
     const { ctx } = this;
     const username = ctx.locals.user.data.username;
     await this.ctx.model.User.updateOne({ username }, Object.assign(payload, { updatedAt: Date.now() }));
-    return 'set success';
+    return await this.get();
   }
 
   async get() {

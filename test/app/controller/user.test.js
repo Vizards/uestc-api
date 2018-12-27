@@ -44,7 +44,8 @@ describe('test/app/controller/user.test.js', () => {
       .expect('Content-Type', /json/)
       .expect(200);
     assert(res.body.code === 201);
-    assert(res.body.data === 'set success');
+    assert(res.body.data.length !== 0);
+    assert(res.body.data.stuID === app.config.user.username);
   });
 
   it('should get course', async () => {
