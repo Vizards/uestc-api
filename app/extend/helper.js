@@ -2,6 +2,7 @@
 
 const moment = require('moment');
 const request = require('request-promise-native').defaults({ simple: false, resolveWithFullResponse: true });
+const CryptoJS = require('crypto-js');
 
 // 处理 POST 成功响应
 exports.postSuccess = ({ ctx, res, msg = 'Post Success' }) => {
@@ -67,3 +68,30 @@ exports.options = (url, method, Cookie, form) => {
   };
 };
 
+exports.encrypt = (data, aesKey) => {
+  if (!aesKey) aesKey = 'rjBFAaHsNkKAhpoi'; // 没有什么用，需要从 HTML 解析得到真正的动态 key
+  const $aes_chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+  const aes_chars_len = $aes_chars.length;
+
+  function getAesString(data, key0, iv0) {
+    key0 = key0.replace(/(^\s+)|(\s+$)/g, '');
+    const key = CryptoJS.enc.Utf8.parse(key0);
+    const iv = CryptoJS.enc.Utf8.parse(iv0);
+    const encrypted = CryptoJS.AES.encrypt(data, key, {
+      iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+    return encrypted.toString();
+  }
+
+  function randomString(len) {
+    let retStr = '';
+    for (let i = 0; i < len; i++) {
+      retStr += $aes_chars.charAt(Math.floor(Math.random() * aes_chars_len));
+    }
+    return retStr;
+  }
+
+  return getAesString(randomString(64) + data, aesKey, randomString(16));
+};

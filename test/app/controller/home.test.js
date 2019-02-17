@@ -25,4 +25,20 @@ describe('test/app/controller/home.test.js', () => {
       .expect(200);
     assert(res.body.data === 'hi, uestc');
   });
+
+  it('should get school calendar', async () => {
+    const body = {
+      year: app.config.user.year,
+      semester: app.config.user.semester,
+    };
+    const res = await app.httpRequest()
+      .post('/api/home/calendar')
+      .set('Accept', 'application/json')
+      .send(body)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 201);
+    assert(res.body.data.hasOwnProperty('startDate') === true);
+    assert(res.body.data.hasOwnProperty('endDate') === true);
+  });
 });

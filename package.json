@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "crypto-js": "^3.1.9-1",
     "egg": "^2.11.0",
     "egg-alinode": "^2.0.1",
     "egg-cors": "^2.1.0",

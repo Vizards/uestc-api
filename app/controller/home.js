@@ -3,6 +3,15 @@
 const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
+  constructor(ctx) {
+    super(ctx);
+
+    this.calendarTranser = {
+      year: { type: 'string', required: true, allowEmpty: false, format: /^[0-9]{4}$/ },
+      semester: { type: 'string', required: true, allowEmpty: false, format: /[1|2]$/ },
+    };
+  }
+
   async index() {
     const { ctx } = this;
     if (ctx.acceptJSON) {
@@ -13,6 +22,14 @@ class HomeController extends Controller {
       ctx.set(result.headers);
       ctx.body = result.data;
     }
+  }
+
+  async calendar() {
+    const { ctx, service } = this;
+    ctx.validate(this.calendarTranser);
+    const payload = ctx.request.body || {};
+    const res = await service.calendar.get(payload);
+    ctx.helper.postSuccess({ ctx, res });
   }
 }
 
