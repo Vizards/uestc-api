@@ -20,7 +20,8 @@ class IdasService extends Service {
       const option = await this.ctx.helper.options(loginUrl);
       const res = await request(option);
       const $ = await cheerio.load(res.body);
-      const aesKey = res.body.match(/pwdDefaultEncryptSalt.*/)[0].split('"')[1];
+      // 又不加密了，佛了
+      // const aesKey = res.body.match(/pwdDefaultEncryptSalt.*/)[0].split('"')[1];
       const names = await $('#casLoginForm > input').map((i, el) => {
         return $(el).attr('name');
       }).get();
@@ -30,7 +31,8 @@ class IdasService extends Service {
       }).get();
 
       const params = await _.object(names, values);
-      return Promise.resolve(Object.assign(params, { Cookies1: `${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]}`, aesKey }));
+      // return Promise.resolve(Object.assign(params, { Cookies1: `${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]}`, aesKey }));
+      return Promise.resolve(Object.assign(params, { Cookies1: `${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]}` }));
     } catch (err) {
       return this.ctx.throw(403, '暂时无法访问统一身份认证系统');
     }
@@ -41,7 +43,8 @@ class IdasService extends Service {
   async getRedirectUrl(params, payload) {
     // const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
     // 处理密码
-    payload.password = this.ctx.helper.encrypt(payload.password, params.aesKey);
+    // 又不加密了，佛了
+    // payload.password = this.ctx.helper.encrypt(payload.password, params.aesKey);
     const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, { rememberMe: 'on' }));
     const res = await request(option);
     if (res.body.includes('您提供的用户名或者密码有误')) {
