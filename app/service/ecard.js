@@ -5,6 +5,7 @@ const request = require('request-promise-native').defaults({ simple: false, reso
 const ecardIndexUrl = 'http://ecard.uestc.edu.cn';
 const unionAuthUrl = 'http://idas.uestc.edu.cn/authserver/login?service=http%3A%2F%2Fecard.uestc.edu.cn%2Fcaslogin.jsp';
 const ecardLoginUrl = 'http://ecard.uestc.edu.cn/c/portal/login';
+const ecardPersonalUrl = 'http://ecard.uestc.edu.cn/web/guest/personal';
 
 class ecardService extends Service {
   async getCookies() {
@@ -33,23 +34,58 @@ class ecardService extends Service {
     }
   }
 
+  // 一卡通登录需要提前访问这两个域名，否则在后续的 login 过程中无法获取新的 JSESSIONID
+  async casLogin(ticketInfo, ecardCookies) {
+    const cookies = `${ecardCookies.join(';')};${ticketInfo.setCookie.join(';')}`;
+    const options = await this.ctx.helper.options(ticketInfo.url, 'GET', cookies);
+    try {
+      const res = await request(options);
+      const options1 = await this.ctx.helper.options(res.headers.location, 'GET', cookies);
+      return await request(options1);
+    } catch (err) {
+      return this.ctx.throw(403, 'casLogin 失败');
+    }
+  }
+
   async login(ticketInfo, ecardCookies) {
-    const option = await this.ctx.helper.options(ticketInfo.url, 'GET', `${ecardCookies};${ticketInfo.setCookie}`);
+    const cookies = `${ecardCookies.join(';')};${ticketInfo.setCookie.join(';')}`;
+    const option = await this.ctx.helper.options(ecardLoginUrl, 'GET', cookies);
     try {
       const res = await request(option);
-      return res.headers;
+      if (res.headers['set-cookie'][0].includes('JSESSIONID')) {
+        // 获取到更新后的 JSESSIONID 并加入 ecardCookies;
+        ecardCookies = res.headers['set-cookie'];
+        return `${ecardCookies.join(';')};${ticketInfo.setCookie.join(';')}`;
+      }
+      return this.ctx.throw(403, '一卡通网站登录过程中未按预期更新 cookie');
     } catch (err) {
       return this.ctx.throw(403, '登录一卡通网站失败');
+    }
+  }
+
+  async getPersonalInfo(cookies) {
+    const option = await this.ctx.helper.options(ecardPersonalUrl, 'GET', cookies);
+    try {
+      const res = await request(option);
+      return await this.ctx.service.parser.parseECardInfo(res.body);
+    } catch (e) {
+      return this.ctx.throw(403, '获取一卡通个人信息失败');
     }
   }
 
   async query() {
     const { ctx } = this;
     try {
-      const finalCookies = ctx.locals.user.data.cookies;
-      const ecardCookies = await this.getCookies(finalCookies);
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'CASTGC',
+        'route',
+        'JSESSIONID',
+      ]);
+      const ecardCookies = await this.getCookies();
       const ticketInfo = await this.getTicketInfo(finalCookies);
-      return await this.login(ticketInfo, ecardCookies);
+      await this.casLogin(ticketInfo, ecardCookies);
+      const cookies = await this.login(ticketInfo, ecardCookies);
+      return await this.getPersonalInfo(cookies);
     } catch (err) {
       ctx.throw(err);
     }

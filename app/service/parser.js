@@ -284,6 +284,29 @@ class parserService extends Service {
     }).get();
     return obj;
   }
+
+  parseECardInfo(body) {
+    const $ = cheerio.load(body);
+    const tr = $('.card-info > tbody > tr');
+    const obj = {};
+    tr.map((i, element) => {
+      const text = $(element).find('td:nth-of-type(1)').text();
+      if (text.includes('卡号')) obj.id = +text.split('：')[1];
+      if (text.includes('卡状态')) obj.status = text.split('：')[1];
+      if (text.includes('卡有效期')) obj.expirationTime = text.split('：')[1];
+      if (text.includes('充值未领取')) obj.unClaimed = +text.split('：')[1].substring(0, text.split('：')[1].length - 1);
+      return false;
+    }).get();
+
+    const tradeTr = $('.trade_table > tbody > tr');
+
+    tradeTr.map((i, element) => {
+      const text = +$(element).find('td:nth-of-type(5)').text();
+      obj.balance = text;
+      return false;
+    }).get();
+    return obj;
+  }
 }
 
 module.exports = parserService;
