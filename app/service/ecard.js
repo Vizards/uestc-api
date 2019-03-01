@@ -73,6 +73,23 @@ class ecardService extends Service {
     }
   }
 
+  async cookies() {
+    const { ctx } = this;
+    try {
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'CASTGC',
+        'route',
+        'JSESSIONID',
+      ]);
+      const ecardCookies = await this.getCookies();
+      const ticketInfo = await this.getTicketInfo(finalCookies);
+      await this.casLogin(ticketInfo, ecardCookies);
+      return await this.login(ticketInfo, ecardCookies);
+    } catch (err) {
+      return ctx.throw(403, err);
+    }
+  }
+
   async query() {
     const { ctx } = this;
     try {
@@ -87,7 +104,7 @@ class ecardService extends Service {
       const cookies = await this.login(ticketInfo, ecardCookies);
       return await this.getPersonalInfo(cookies);
     } catch (err) {
-      ctx.throw(err);
+      return ctx.throw(403, '查询一卡通信息失败');
     }
   }
 }

@@ -21,6 +21,7 @@ module.exports = app => {
   router.post('/api/user/usualGrade', app.jwt, cookiesHandler, ssoHandler, controller.user.usualGrade);
   router.get('/api/user/gpa', app.jwt, cookiesHandler, ssoHandler, controller.user.gpa);
   router.get('/api/living/ecard', app.jwt, cookiesHandler, controller.living.ecard);
+  router.post('/api/living/bill', app.jwt, cookiesHandler, controller.living.bill);
   router.get('/api/extra/traffic', controller.extra.traffic);
   router.get('/api/extra/info', controller.extra.info);
   router.get('/api/extra/stu', controller.extra.stu);

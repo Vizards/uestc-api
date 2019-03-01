@@ -2,6 +2,7 @@
 
 const Service = require('egg').Service;
 const cheerio = require('cheerio');
+const moment = require('moment');
 
 class parserService extends Service {
 
@@ -306,6 +307,46 @@ class parserService extends Service {
       return false;
     }).get();
     return obj;
+  }
+
+  parseTradeSum(body) {
+    const $ = cheerio.load(body);
+    const data = {};
+
+    const value = $('#_transDtl_WAR_ecardportlet_pageCount').attr('value');
+    data.page_sum = value === undefined ? 1 : +value;
+
+    $('p').map((i, el) => {
+      const total_cost = +$(el).find('span:nth-of-type(1)').text();
+      const total_charge = +$(el).find('span:nth-of-type(2)').text();
+      data.total_cost = total_cost;
+      data.total_charge = total_charge;
+      return false;
+    });
+
+    return data;
+  }
+
+  parseTradeInfo(body) {
+    const $ = cheerio.load(body);
+    const history = $('.trade_table > tbody > tr').map((i, el) => {
+      const date = $(el).find('td:nth-of-type(1)').text();
+      const time = $(el).find('td:nth-of-type(2)').text();
+      const device = $(el).find('td:nth-of-type(3)').text() === '易支付' ? '电费充值' : $(el).find('td:nth-of-type(3)').text();
+      const cost = +$(el).find('td:nth-of-type(4) > span').text();
+      const balance = +$(el).find('td:nth-of-type(5)').text();
+      return device !== '电费充值' ? {
+        time: moment(`${date} ${time}`, 'YYYYMMDD HHmmss').format('YYYY-MM-DD HH:mm:ss'),
+        device, cost, balance,
+      } : {
+        time: moment(`${date} ${time}`, 'YYYYMMDD HHmmss').format('YYYY-MM-DD HH:mm:ss'),
+        device,
+        cost: balance,
+        roomId: cost,
+      };
+    }).get();
+    history.shift();
+    return history;
   }
 }
 
