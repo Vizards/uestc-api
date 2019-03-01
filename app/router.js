@@ -10,7 +10,7 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.post('/api/home/calendar', controller.home.calendar);
   router.post('/api/user/login', controller.user.login);
-  router.post('/api/user/exit', app.jwt, controller.user.exit);
+  router.post('/api/user/exit', app.jwt, cookiesHandler, controller.user.exit);
   router.post('/api/user/delete', controller.user.delete);
   router.get('/api/user/profile', app.jwt, cookiesHandler, ssoHandler, controller.user.profile);
   router.post('/api/user/profile', app.jwt, cookiesHandler, ssoHandler, controller.user.setProfile);
@@ -20,10 +20,7 @@ module.exports = app => {
   router.get('/api/user/grade', app.jwt, cookiesHandler, ssoHandler, controller.user.allGrade);
   router.post('/api/user/usualGrade', app.jwt, cookiesHandler, ssoHandler, controller.user.usualGrade);
   router.get('/api/user/gpa', app.jwt, cookiesHandler, ssoHandler, controller.user.gpa);
-  router.post('/api/xifu/bind', app.jwt, controller.xifu.bindXiFu);
-  router.get('/api/xifu/ecard', app.jwt, controller.xifu.ecard);
-  router.get('/api/xifu/bill', app.jwt, controller.xifu.bill);
-  router.post('/api/xifu/electricity', app.jwt, controller.xifu.electricity);
+  router.get('/api/living/ecard', app.jwt, cookiesHandler, controller.living.ecard);
   router.get('/api/extra/traffic', controller.extra.traffic);
   router.get('/api/extra/info', controller.extra.info);
   router.get('/api/extra/stu', controller.extra.stu);

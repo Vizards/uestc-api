@@ -103,6 +103,7 @@ class UserController extends Controller {
     ctx.helper.getSuccess({ ctx, res });
   }
 
+  // 获取平时成绩信息
   async usualGrade() {
     const { ctx, service } = this;
     ctx.validate(this.gradeTransfer);

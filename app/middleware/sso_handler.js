@@ -1,54 +1,104 @@
 'use strict';
 
+async function refresh(ctx) {
+  const cookies = ctx.helper.generateCookieString(ctx, [
+    'semester.id',
+    'JSESSIONID',
+    'sto-id-20480',
+    'iPlanetDirectoryPro',
+  ]);
+
+  try {
+    const res = await ctx.helper.checkSSO('http://eams.uestc.edu.cn/eams/home.action', cookies);
+    switch (res.statusCode) {
+      case 200:
+        if (res.body.includes('本次会话已经被过期（可能是由于重复登录）') || res.body.includes('当前用户存在重复登录的情况')) {
+          await refresh(ctx);
+        }
+        return '已登录';
+      case 302:
+        return res.headers.location;
+      default:
+        return ctx.throw(403, '无法重定向至指定页面，教务系统未按预期跳转');
+    }
+  } catch (e) {
+    return ctx.throw(500, e);
+  }
+}
+
+async function getTicketUrl(ctx, url) {
+  const cookies = ctx.helper.generateCookieString(ctx, [
+    'CASTGC',
+    'route',
+    'JSESSIONID',
+    'iPlanetDirectoryPro',
+  ]);
+  try {
+    const res = await ctx.helper.checkSSO(url, cookies, 'idas.uestc.edu.cn');
+    if (res.statusCode === 302 && res.headers.location.includes('ticket')) {
+      return res.headers.location;
+    }
+    return ctx.throw(403, '统一身份认证系统登录失败，请尝试重新登录以避开单点登录限制');
+  } catch (e) {
+    return ctx.throw(500, e);
+  }
+}
+
+async function getNewCookies(ctx, ticketUrl) {
+  const cookies = ctx.helper.generateCookieString(ctx, [
+    'semester.id',
+    'JSESSIONID',
+    'sto-id-20480',
+    'iPlanetDirectoryPro',
+  ]);
+
+  try {
+    const res = await ctx.helper.checkSSO(ticketUrl, cookies);
+    if (res.headers['set-cookie'].length !== 0) {
+      return res.headers['set-cookie'];
+    }
+  } catch (err) {
+    return ctx.throw(500, err);
+  }
+}
+
+async function updateCookies(ctx, newCookies) {
+  try {
+    const username = ctx.locals.user.data.username;
+    const query = ctx.model.User.findOne({ username });
+    await query.select('finalCookies');
+    const data = await query.exec();
+
+    const finalCookies = JSON.parse(data.finalCookies);
+    newCookies.forEach(item => {
+      const splitLocation = item.indexOf('=');
+      const key = item.substring(0, splitLocation);
+      const value = item.substring(splitLocation + 1);
+      finalCookies[key] = value;
+    });
+
+    ctx.locals.user.data.cookies = finalCookies;
+
+    await ctx.model.User.updateOne({
+      username,
+    }, {
+      updatedAt: Date.now(),
+      finalCookies: JSON.stringify(finalCookies),
+    });
+
+  } catch (e) {
+    return ctx.throw(500, e);
+  }
+}
+
 module.exports = () => {
   return async (ctx, next) => {
-    // 封装请求，遇到 SSO 时只需连续请求 http://eams.uestc.edu.cn/eams/home.action 即可
-    let cookies = ctx.locals.user.data.cookies;
-    // ctx.logger.info(cookies);
-    const check = () => ctx.helper.checkSSO('http://eams.uestc.edu.cn/eams/home.action', cookies.substr(0, 229), 'eams.uestc.edu.cn');
-    try {
-      let res = await check();
-      while (res.body.includes('重复登录')) {
-        res = await check();
-      }
-      // 如果这里没有出现 SSO，就直接跳过完事儿
-      if (res.body.includes('您的当前位置')) {
-        ctx.locals.user.data.cookies = cookies.substr(0, 229);
-        return next();
-      }
-      // 这是学校教务系统维护的时候经常出现的错误，到了下面这个已经废弃的 url, 输什么用户名和密码都不会对
-      if (res.headers.location === 'http://eams.uestc.edu.cn/eams/login.action') ctx.throw(403, '教务系统出现问题');
-      // 一直请求，直到开始请求 http://eams.uestc.edu.cn/eams/home!index.action?ticket=xxxx 的时候结束
-      while (res.headers.location !== undefined && !res.headers.location.includes('ticket')) {
-        if (res.headers.location.includes('idas')) {
-          // 【有可能】会 302 到 idas 去，此时必须要带上 CASTGC 这个 cookies，否则就回不来了
-          res = await ctx.helper.checkSSO(res.headers.location, cookies, 'idas.uestc.edu.cn');
-        } else {
-          res = await check();
-        }
-      }
-      if (res.headers['set-cookie'][0].includes('route')) {
-        cookies = `${res.headers['set-cookie'][0]};${cookies.substr(0, 229)}`;
-      }
-      // 如果这里直接回 http://idas.uestc.edu.cn 了那就没救了，交给后面让用户重新登录
-      if (res.body.includes('电子科技大学登录')) ctx.throw(403, '统一身份认证系统需要授权');
-
-      while (res.body === '' && res.headers.location.includes('ticket')) {
-        res = await ctx.helper.checkSSO(res.headers.location, cookies, 'eams.uestc.edu.cn');
-        // ctx.logger.info(res);
-        if (res.headers['set-cookie'].length === 2) {
-          cookies = `${cookies.substr(0, 39)}semester.id=183;${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]};`;
-        }
-      }
-      // 在此处触发重复登录的界面
-      res = await check();
-      while (res.body.includes('重复登录')) {
-        res = await check();
-      }
-    } catch (err) {
-      ctx.throw(err);
+    const url = await refresh(ctx);
+    if (url !== '已登录') {
+      const ticketUrl = await getTicketUrl(ctx, url);
+      const newCookies = await getNewCookies(ctx, ticketUrl);
+      await updateCookies(ctx, newCookies);
     }
-    ctx.locals.user.data.cookies = `UESTCXGUID=;UM_distinctid=;${cookies}`;
     return next();
   };
 };

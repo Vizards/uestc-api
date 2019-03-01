@@ -27,7 +27,11 @@ class gradeService extends Service {
   async getGrade(payload) {
     const { ctx, service } = this;
     try {
-      const finalCookies = ctx.locals.user.data.cookies;
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'iPlanetDirectoryPro',
+        'JSESSIONID',
+        'sto-id-20480',
+      ]);
       const semesterId = await service.semester.getSemesterId(payload, finalCookies);
       const gradeOptions = await ctx.helper.options(
         `${gradeUrl}!search.action?semesterId=${semesterId}&projectType=`,
@@ -44,7 +48,11 @@ class gradeService extends Service {
   async allGrade() {
     const { ctx, service } = this;
     try {
-      const finalCookies = ctx.locals.user.data.cookies;
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'iPlanetDirectoryPro',
+        'JSESSIONID',
+        'sto-id-20480',
+      ]);
       const gradeOptions = await ctx.helper.options(
         `${gradeUrl}!historyCourseGrade.action?projectType=MAJOR`,
         'GET',
@@ -62,7 +70,11 @@ class gradeService extends Service {
   async usualGrade(payload) {
     const { ctx, service } = this;
     try {
-      const finalCookies = ctx.locals.user.data.cookies;
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'iPlanetDirectoryPro',
+        'JSESSIONID',
+        'sto-id-20480',
+      ]);
       const semesterId = await service.semester.getSemesterId(payload, finalCookies);
       const usualGradeOptions = this.ctx.helper.options(
         allGradeUrl,
@@ -82,7 +94,11 @@ class gradeService extends Service {
   async getGPA() {
     const { ctx, service } = this;
     try {
-      const finalCookies = ctx.locals.user.data.cookies;
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'iPlanetDirectoryPro',
+        'JSESSIONID',
+        'sto-id-20480',
+      ]);
       const gradeOptions = await ctx.helper.options(
         `${gradeUrl}!historyCourseGrade.action?projectType=MAJOR`,
         'GET',

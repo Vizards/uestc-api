@@ -27,7 +27,12 @@ class ProfileService extends Service {
 
   async get() {
     const { ctx } = this;
-    const options = await ctx.helper.options(profileUrl, 'GET', ctx.locals.user.data.cookies);
+    const finalCookies = ctx.helper.generateCookieString(ctx, [
+      'iPlanetDirectoryPro',
+      'JSESSIONID',
+      'sto-id-20480',
+    ]);
+    const options = await ctx.helper.options(profileUrl, 'GET', finalCookies);
     try {
       const res = await request(options);
       const profile = await this.queryProfile();

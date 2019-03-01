@@ -30,9 +30,12 @@ class IdasService extends Service {
         return $(el).attr('value');
       }).get();
 
-      const params = await _.object(names, values);
+      const formData = await _.object(names, values);
       // return Promise.resolve(Object.assign(params, { Cookies1: `${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]}`, aesKey }));
-      return Promise.resolve(Object.assign(params, { Cookies1: `${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]}` }));
+      return {
+        formData,
+        cookies: res.headers['set-cookie'],
+      };
     } catch (err) {
       return this.ctx.throw(403, '暂时无法访问统一身份认证系统');
     }
@@ -40,12 +43,12 @@ class IdasService extends Service {
 
   // 获取重定向地址
   // async getRedirectUrl(params, payload, captcha) {
-  async getRedirectUrl(params, payload) {
+  async getRedirectUrl(formData, cookies, payload) {
+    // 处理验证码
     // const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
-    // 处理密码
-    // 又不加密了，佛了
+    // 处理密码，又不加密了，佛了
     // payload.password = this.ctx.helper.encrypt(payload.password, params.aesKey);
-    const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, { rememberMe: 'on' }));
+    const option = await this.ctx.helper.options(loginUrl, 'POST', cookies.join(';'), _.extend(formData, payload, { rememberMe: 'on' }));
     const res = await request(option);
     if (res.body.includes('您提供的用户名或者密码有误')) {
       return this.ctx.throw(403, '您提供的用户名或者密码有误');
@@ -53,26 +56,41 @@ class IdasService extends Service {
     if (res.headers.location === undefined) {
       return false;
     }
-    return Promise.resolve({ redirectUrl: res.headers.location, redirectCookies1: res.headers['set-cookie'][0], redirectCookies2: res.headers['set-cookie'][1], redirectCookies3: res.headers['set-cookie'][2] });
+    return {
+      redirectUrl: res.headers.location,
+      redirectCookies: res.headers['set-cookie'],
+    };
   }
 
-  async returnCookies(redirectParams, keywords) {
-    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=J${keywords}KEMFNOECBP;${redirectParams.redirectCookies1};${redirectParams.redirectCookies2};${redirectParams.redirectCookies3}`);
+  async returnCookies(redirectParams, keywords, cookies) {
+    const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=J${keywords}KEMFNOECBP;${redirectParams.redirectCookies.join(';')}`);
     const res = await request(option);
-    return Promise.resolve({ finalCookies: `semester.id=183;${res.headers['set-cookie'][1]};${res.headers['set-cookie'][0]};${redirectParams.redirectCookies1};${redirectParams.redirectCookies2};${redirectParams.redirectCookies3}` });
+    const finalCookies = {};
+    const cookiesArray = [
+      'semester.id=183',
+    ].concat(cookies).concat(redirectParams.redirectCookies).concat(res.headers['set-cookie']);
+
+    cookiesArray.forEach(item => {
+      const splitLocation = item.indexOf('=');
+      const key = item.substring(0, splitLocation);
+      const value = item.substring(splitLocation + 1);
+      finalCookies[key] = value;
+    });
+
+    return Promise.resolve({ finalCookies: JSON.stringify(finalCookies) });
   }
 
   // 目标地址
-  async genCookies(redirectParams) {
+  async genCookies(redirectParams, cookies) {
     // JGKE or JHKE or JIKE
     try {
-      return this.returnCookies(redirectParams, 'G');
+      return this.returnCookies(redirectParams, 'G', cookies);
     } catch (err) {
       try {
-        return this.returnCookies(redirectParams, 'H');
+        return this.returnCookies(redirectParams, 'H', cookies);
       } catch (err) {
         try {
-          return this.returnCookies(redirectParams, 'I');
+          return this.returnCookies(redirectParams, 'I', cookies);
         } catch (err) {
           return this.ctx.throw(403, '统一身份认证系统报告了一个错误');
         }
@@ -97,8 +115,8 @@ class IdasService extends Service {
       //   }
       // }
       const params = await this.getParams();
-      const redirectParams = await this.getRedirectUrl(params, payload);
-      return await this.genCookies(redirectParams);
+      const redirectParams = await this.getRedirectUrl(params.formData, params.cookies, payload);
+      return await this.genCookies(redirectParams, params.cookies);
     } catch (err) {
       ctx.throw(err);
     }

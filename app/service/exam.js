@@ -41,7 +41,11 @@ class examService extends Service {
   async getExam(payload) {
     const { ctx, service } = this;
     try {
-      const finalCookies = ctx.locals.user.data.cookies;
+      const finalCookies = ctx.helper.generateCookieString(ctx, [
+        'iPlanetDirectoryPro',
+        'JSESSIONID',
+        'sto-id-20480',
+      ]);
       const semesterId = await service.semester.getSemesterId(payload, finalCookies);
       return await this.getSemesterExamData(finalCookies, semesterId);
     } catch (err) {

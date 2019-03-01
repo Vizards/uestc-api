@@ -39,7 +39,12 @@ class UserService extends Service {
 
   async exit() {
     const { ctx } = this;
-    const options = await ctx.helper.options(exitUrl, 'GET', ctx.locals.user.data.cookies);
+    const finalCookies = ctx.helper.generateCookieString(ctx, [
+      'iPlanetDirectoryPro',
+      'JSESSIONID',
+      'sto-id-20480',
+    ]);
+    const options = await ctx.helper.options(exitUrl, 'GET', finalCookies);
     try {
       const res = await request(options);
       if (res.statusCode === 200 && res.body.includes('您已经成功退出统一身份认证系统')) {
