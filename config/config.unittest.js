@@ -8,9 +8,7 @@ module.exports = {
     semester: '2',
   },
 
-  xifu: {
-    mobile: process.env.YOUR_XIFU_ACCOUNT,
-    password: process.env.YOUR_XIFU_PASS,
+  living: {
     roomId: process.env.YOUR_ROOM_ID,
   },
 
