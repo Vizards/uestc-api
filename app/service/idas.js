@@ -65,18 +65,11 @@ class IdasService extends Service {
   async returnCookies(redirectParams, keywords, cookies) {
     const option = await this.ctx.helper.options(redirectParams.redirectUrl, 'GET', `semester.id=183;JSESSIONID=00000000000000000;sto-id-20480=J${keywords}KEMFNOECBP;${redirectParams.redirectCookies.join(';')}`);
     const res = await request(option);
-    const finalCookies = {};
     const cookiesArray = [
       'semester.id=183',
     ].concat(cookies).concat(redirectParams.redirectCookies).concat(res.headers['set-cookie']);
 
-    cookiesArray.forEach(item => {
-      const splitLocation = item.indexOf('=');
-      const key = item.substring(0, splitLocation);
-      const value = item.substring(splitLocation + 1);
-      finalCookies[key] = value;
-    });
-
+    const finalCookies = await this.ctx.helper.parseCookies(cookiesArray);
     return Promise.resolve({ finalCookies: JSON.stringify(finalCookies) });
   }
 

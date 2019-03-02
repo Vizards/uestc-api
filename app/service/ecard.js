@@ -54,8 +54,10 @@ class ecardService extends Service {
       const res = await request(option);
       if (res.headers['set-cookie'][0].includes('JSESSIONID')) {
         // 获取到更新后的 JSESSIONID 并加入 ecardCookies;
-        ecardCookies = res.headers['set-cookie'];
-        return `${ecardCookies.join(';')};${ticketInfo.setCookie.join(';')}`;
+        const parsedEcardCookies = await this.ctx.helper.parseCookies(ecardCookies);
+        const parsedNewEcardCookies = await this.ctx.helper.parseCookies(res.headers['set-cookie']);
+        const parsedTicketInfoCookies = await this.ctx.helper.parseCookies(ticketInfo.setCookie);
+        return Object.assign(parsedEcardCookies, parsedNewEcardCookies, parsedTicketInfoCookies);
       }
       return this.ctx.throw(403, '一卡通网站登录过程中未按预期更新 cookie');
     } catch (err) {
@@ -64,6 +66,7 @@ class ecardService extends Service {
   }
 
   async getPersonalInfo(cookies) {
+    cookies = await this.ctx.helper.generateCookieString(this.ctx, undefined, JSON.stringify(cookies));
     const option = await this.ctx.helper.options(ecardPersonalUrl, 'GET', cookies);
     try {
       const res = await request(option);
@@ -73,14 +76,14 @@ class ecardService extends Service {
     }
   }
 
-  async cookies() {
+  async cookies(cookies) {
     const { ctx } = this;
     try {
       const finalCookies = ctx.helper.generateCookieString(ctx, [
         'CASTGC',
         'route',
         'JSESSIONID',
-      ]);
+      ], cookies);
       const ecardCookies = await this.getCookies();
       const ticketInfo = await this.getTicketInfo(finalCookies);
       await this.casLogin(ticketInfo, ecardCookies);

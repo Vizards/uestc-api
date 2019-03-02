@@ -9,6 +9,8 @@ module.exports = app => {
   const ssoHandler = app.middleware.ssoHandler();
   router.get('/', controller.home.index);
   router.post('/api/home/calendar', controller.home.calendar);
+  router.post('/api/dev/idas', controller.dev.idas);
+  router.post('/api/dev/ecard', controller.dev.ecard);
   router.post('/api/user/login', controller.user.login);
   router.post('/api/user/exit', app.jwt, cookiesHandler, controller.user.exit);
   router.post('/api/user/delete', controller.user.delete);

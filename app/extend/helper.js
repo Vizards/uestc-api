@@ -96,15 +96,24 @@ exports.encrypt = (data, aesKey) => {
   return getAesString(randomString(64) + data, aesKey, randomString(16));
 };
 
-exports.generateCookieString = (ctx, requiredKeys) => {
+exports.generateCookieString = (ctx, requiredKeys, customCookies) => {
   let generatedCookies = '';
-  const cookies = JSON.parse(ctx.locals.user.data.cookies);
-  if (requiredKeys === undefined) {
-    generatedCookies = cookies;
-  } else {
-    requiredKeys.forEach(key => {
-      generatedCookies += `${key}=${cookies[key]};`;
-    });
-  }
+  const cookies = JSON.parse(customCookies ? customCookies : ctx.locals.user.data.cookies);
+  requiredKeys = requiredKeys ? requiredKeys : Object.keys(cookies);
+
+  requiredKeys.forEach(key => {
+    generatedCookies += `${key}=${cookies[key]};`;
+  });
   return generatedCookies;
+};
+
+exports.parseCookies = cookiesArray => {
+  const cookies = {};
+  cookiesArray.forEach(item => {
+    const splitLocation = item.indexOf('=');
+    const key = item.substring(0, splitLocation);
+    const value = item.substring(splitLocation + 1);
+    cookies[key] = value;
+  });
+  return cookies;
 };

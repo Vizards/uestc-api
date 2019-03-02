@@ -101,7 +101,8 @@ class billService extends Service {
   async query(payload) {
     const { ctx } = this;
     try {
-      const cookies = await ctx.service.ecard.cookies();
+      const cookiesObj = await ctx.service.ecard.cookies();
+      const cookies = await ctx.helper.generateCookieString(ctx, undefined, JSON.stringify(cookiesObj));
       if (payload.type !== 'all') {
         const data = await this.parseSpecified(payload, cookies);
         return await this.traversePage(data);
