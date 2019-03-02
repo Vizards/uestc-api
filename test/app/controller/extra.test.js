@@ -3,13 +3,18 @@
 const { app } = require('egg-mock/bootstrap');
 
 describe('test/app/controller/extra.test.js', () => {
-  // 外网无法访问河畔时，测试会跑不通
   it('should get traffic info', async () => {
     await app.httpRequest()
       .get('/api/extra/traffic')
       .set('Accept', 'text/html')
-      .expect('Content-Type', /html/)
-      .expect(200);
+      .expect(302);
+  });
+
+  it('should get department contact info', async () => {
+    await app.httpRequest()
+      .get('/api/extra/contact')
+      .set('Accept', 'text/html')
+      .expect(302);
   });
 
   it('should get info', async () => {

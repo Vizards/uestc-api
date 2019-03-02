@@ -24,6 +24,7 @@ module.exports = app => {
   router.post('/api/living/bill', app.jwt, cookiesHandler, controller.living.bill);
   router.post('/api/living/electricity', app.jwt, controller.living.electricity);
   router.get('/api/extra/traffic', controller.extra.traffic);
+  router.get('/api/extra/contact', controller.extra.contact);
   router.get('/api/extra/info', controller.extra.info);
   router.get('/api/extra/stu', controller.extra.stu);
   router.get('/api/extra/edu', controller.extra.edu);
