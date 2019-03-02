@@ -5,7 +5,7 @@ const request = require('request-promise-native').defaults({ simple: false, reso
 const ecardIndexUrl = 'http://ecard.uestc.edu.cn';
 const unionAuthUrl = 'http://idas.uestc.edu.cn/authserver/login?service=http%3A%2F%2Fecard.uestc.edu.cn%2Fcaslogin.jsp';
 const ecardLoginUrl = 'http://ecard.uestc.edu.cn/c/portal/login';
-const ecardPersonalUrl = 'http://ecard.uestc.edu.cn/web/guest/personal';
+const ecardPersonalUrl = 'http://ecard.uestc.edu.cn/c/portal/render_portlet?p_l_id=10570&p_p_id=cardInfo_WAR_ecardportlet&p_p_lifecycle=0&p_t_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=null&p_p_col_pos=null&p_p_col_count=null&p_p_isolated=1&currentURL=%2Fweb%2Fguest%2Fpersonal';
 
 class ecardService extends Service {
   async getCookies() {
@@ -67,7 +67,7 @@ class ecardService extends Service {
 
   async getPersonalInfo(cookies) {
     cookies = await this.ctx.helper.generateCookieString(this.ctx, undefined, JSON.stringify(cookies));
-    const option = await this.ctx.helper.options(ecardPersonalUrl, 'GET', cookies);
+    const option = await this.ctx.helper.options(ecardPersonalUrl, 'POST', cookies);
     try {
       const res = await request(option);
       return await this.ctx.service.parser.parseECardInfo(res.body);

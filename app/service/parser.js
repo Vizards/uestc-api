@@ -294,6 +294,7 @@ class parserService extends Service {
       const text = $(element).find('td:nth-of-type(1)').text();
       if (text.includes('卡号')) obj.id = +text.split('：')[1];
       if (text.includes('卡状态')) obj.status = text.split('：')[1];
+      if (text.includes('卡余额')) obj.balance = +text.split('：')[1].substring(0, text.split('：')[1].length - 1);
       if (text.includes('卡有效期')) obj.expirationTime = text.split('：')[1];
       if (text.includes('充值未领取')) obj.unClaimed = +text.split('：')[1].substring(0, text.split('：')[1].length - 1);
       return false;
