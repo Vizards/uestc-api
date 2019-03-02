@@ -20,21 +20,34 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
     - [x] 获取所有课程成绩信息
     - [x] 获取成绩统计信息
     - [x] 获取平时成绩信息
+    - [x] 获取和设置用户个人信息
     - [ ] 评教
 
 2. 后勤综合服务
-    - [x] 绑定喜付账户
     - [x] 获取一卡通信息
-    - [x] 获取最近 30 天账单
+    - [ ] 一卡通挂失
+    - [x] 获取一卡通和电费账单
     - [x] 获取宿舍电费信息
-    - [x] 监控宿舍电费与一卡通余额，余额预警推送
-    - [x] 获取班车 / 公交信息
 
-3. 教务处
-    - [x] 教务处学生公告
-    - [x] 学校部门信息
-    - [x] 学院地址 & 联系方式
+3. 校园实用工具
+    - [x] 校园班车查询
+    - [x] 空闲教室查询
+    - [x] 当日课程查询
+    - [x] 全校课程查询
+    - [x] 教师信息查询
+    
+4. 公告与信息
+    - [x] 学校办公室联系方式
+    - [x] 教务服务指南
+    - [x] 教学管理公告
+    - [x] 教研教改公告
+    - [x] 实践交流公告
+    - [x] 教学新闻
 
+> 以上功能尚未完全 API 化。3、4 中的功能均以 302 跳转到相关网页的方式完成（已经过处理使其支持 HTTPS 和移动端视图）。
+>
+> 如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
+    
 ## 文档
 
 - API 接口文档： [GitHub Wiki](https://github.com/Vizards/uestc-api/wiki)
@@ -44,11 +57,7 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 
 ## 快速开始
 
-在开始之前，需要：
-
-1. 已完成初始设置的电子科技大学本科统一身份认证系统账户
-
-2. 已完成学生认证和一卡通、电费房间号绑定的喜付账户
+在开始之前，请确认您的电子科技大学本科统一身份认证系统账户已完成初始设置
 
 #### 安装
 
@@ -63,22 +72,16 @@ $ git clone && npm install
 
 - [MongoDB](https://docs.mongodb.com/)
 
-- [GraphicsMagick](http://www.graphicsmagick.org/)：用于处理验证码
+- ~~[GraphicsMagick](http://www.graphicsmagick.org/)：用于处理验证码~~
 
-- [Tesseract 3.01+](https://github.com/tesseract-ocr/tesseract)：用于识别验证码
+- ~~[Tesseract 3.01+](https://github.com/tesseract-ocr/tesseract)：用于识别验证码~~
 
 #### 开发环境运行
 
-**将 `config.default.js` 和 `config.unittest.js` 中的密码、Key 等替换成自己的**
+**设置 `config.default.js` 和 `config.unittest.js` 中的密码、Key 等**
 
 ```bash
 $ npm run dev
-```
-
-或者可以将参数设置为环境变量，然后运行：
-
-```bash
-$ APP_KEY=xxx JWT_SECRET=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOUNT=xxx YOUR_XIFU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx PROXY=YOUR_HTTP_PROXY_URL npm run dev
 ```
 
 > 参数说明
@@ -88,19 +91,38 @@ $ APP_KEY=xxx JWT_SECRET=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_XIFU_ACCOU
 `APP_KEY` | 是 | 自定义
 `JWT_SECRET` | 是 | 自定义，生成 `jwt-token` 的密钥
 `YOUR_STU_NUM`<br/>`YOUR_STU_PASS` | 否（单元测试必须）| 学号<br/>密码
-`YOUR_XIFU_ACCOUNT`<br/>`YOUR_XIFU_PASS`<br/>`YOUR_ROOM_ID` | 否（单元测试必须）| 喜付账户<br/>喜付密码<br/>宿舍房间号
+`YOUR_ROOM_ID` | 否（单元测试必须）| 宿舍房间号
 `ALINODE_APPID`<br/>`ALINODE_SECRET` | 是 | 阿里云 Node.js 性能平台<br/>`APPID`<br/>`SECRET`<br/>（需自行注册）
 `PROXY` | 否 | HTTP(S) 代理服务器地址和端口 <br> 格式 `http(s)://url:port`
 
+或者可以将参数设置为环境变量，然后运行：
+
+**Linux, MacOS(Bash)**
+
+```bash
+APP_KEY=xxx JWT_SECRET=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_ROOM_ID=xxx ALINODE_APPID=xxx ALINODE_SECRET=xxx PROXY=xxx npm run dev
+```
+
+**Windows(cmd.exe)**
+
+```bash
+set APP_KEY=xxx && set JWT_SECRET=xxx && set YOUR_STU_NUM=xxx && set YOUR_STU_PASS=xxx && set YOUR_ROOM_ID=xxx && set ALINODE_APPID=xxx && set ALINODE_SECRET=xxx && set PROXY=xxx&&npm run dev
+```
+
+**Windows(Powershell)**
+
+```bash
+($env:APP_KEY=xxx) -and ($env:JWT_SECRET=xxx) -and ($env:YOUR_STU_NUM=xxx) -and ($env:YOUR_STU_PASS=xxx) -and ($env:YOUR_ROOM_ID=xxx) -and ($env:ALINODE_APPID=xxx) -and ($env:ALINODE_SECRET=xxx) -and ($env:PROXY=xxx) -and npm start
+```
 
 浏览器打开 `http://127.0.0.1:7001` 页面出现项目主页即为运行成功
 
 #### 单元测试
 
-单元测试受源站网络影响，如遇单元测试无法通过，请先确认 **[教务系统](http://portal.uestc.edu.cn)**、**[清水河畔](http://bbs.uestc.edu.cn)**、**喜付 APP**、**成电微教务（微信订阅号）** 是否可以正常使用
+单元测试受源站网络影响，如遇单元测试无法通过，请先确认 **[教务系统](http://portal.uestc.edu.cn)**、**[一卡通](http://ecard.uestc.edu.cn)**、**成电微教务（微信订阅号）** 是否可以正常使用
 
 ```bash
-$ npm test
+$ npm run test
 ```
 
 目前只完成了 `Controller` 层简单的单元测试，如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
@@ -127,9 +149,22 @@ $ npm run autod
 
 参考：[autod](https://www.npmjs.com/package/autod) 
 
+## 衍生与合作产品
+
+<div style="display: flex; align-items: center;">
+    <img src="https://ipic.vizards.cc/2018-04-14-171713.png" alt="UESTC" width="60px"/>
+    <span><a href="https://github.com/Vizards/uestc-react-native-ios">电子科技大学（UESTC）iOS 客户端</a></span>
+</div>
+<div style="display: flex; align-items: center;">
+    <div style="padding: 5px">
+    <img src="https://raw.githubusercontent.com/Febers/iUESTC/master/picture/app_icon.png" alt="iUESTC" width="50px"/>
+    </div>
+    <span><a href="https://github.com/Febers/iUESTC">iUESTC - 电子科技大学 Android 客户端</a></span>
+</div>
+
 ## 许可协议
 
-[GPL-3.0](https://github.com/Vizards/uestc-api/blob/master/LICENSE)
+[GPL-3.0](https://github.com/Vizards/uestc-api/blob/dev/LICENSE)
 
 
 
