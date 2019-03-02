@@ -57,6 +57,8 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 
 - API 接口文档： [GitHub Wiki](https://github.com/Vizards/uestc-api/wiki)
 
+- 开发者接口文档：[开发者 - GitHub Wiki](https://github.com/Vizards/uestc-api/wiki/16.-%E5%BC%80%E5%8F%91%E8%80%85)
+
 - Egg 框架文档：[egg - 为企业级框架和应用而生](https://eggjs.org)
 
 
