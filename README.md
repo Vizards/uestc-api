@@ -13,7 +13,7 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 ## 功能
 
 > 以下功能尚未完全接口化。3、4 中的功能均以 302 跳转到相关网页的方式完成（已经过处理使其支持 HTTPS 和移动端视图）
-
+> 
 > 如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
 
 
@@ -49,6 +49,10 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
     - [x] 实践交流公告
     - [x] 教学新闻
     
+5. 开发者服务
+    - [x] 获取账户教务系统网站 cookies
+    - [x] 获取账户一卡通网站 cookies
+
 ## 文档
 
 - API 接口文档： [GitHub Wiki](https://github.com/Vizards/uestc-api/wiki)
