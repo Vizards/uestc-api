@@ -12,6 +12,11 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 
 ## 功能
 
+以下功能尚未完全接口化。3、4 中的功能均以 302 跳转到相关网页的方式完成（已经过处理使其支持 HTTPS 和移动端视图）。
+
+如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
+
+
 1. 教务系统
     - [x] 统一身份认证系统登录/退出
     - [x] 按学期获取课程表信息
@@ -43,10 +48,6 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
     - [x] 教研教改公告
     - [x] 实践交流公告
     - [x] 教学新闻
-
-> 以上功能尚未完全 API 化。3、4 中的功能均以 302 跳转到相关网页的方式完成（已经过处理使其支持 HTTPS 和移动端视图）。
->
-> 如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
     
 ## 文档
 
@@ -151,15 +152,19 @@ $ npm run autod
 
 ## 衍生与合作产品
 
-<div style="display: flex; align-items: center;">
-    <img src="https://ipic.vizards.cc/2018-04-14-171713.png" alt="UESTC" width="60px"/>
-    <span><a href="https://github.com/Vizards/uestc-react-native-ios">电子科技大学（UESTC）iOS 客户端</a></span>
+<div>
+<img src="https://ipic.vizards.cc/2018-04-14-171713.png" alt="UESTC" width="60px" style="display: inline-block; vertical-align: middle"/>
+<span style="display: inline-block; vertical-align: middle">
+<a href="https://github.com/Vizards/uestc-react-native-ios">电子科技大学（UESTC）iOS 客户端</a>
+</span>
 </div>
-<div style="display: flex; align-items: center;">
-    <div style="padding: 5px">
-    <img src="https://raw.githubusercontent.com/Febers/iUESTC/master/picture/app_icon.png" alt="iUESTC" width="50px"/>
+<div>
+    <div style="display: inline-block; vertical-align: middle; padding: 5px;">
+        <img src="https://raw.githubusercontent.com/Febers/iUESTC/master/picture/app_icon.png" alt="iUESTC" width="50px"/>
     </div>
-    <span><a href="https://github.com/Febers/iUESTC">iUESTC - 电子科技大学 Android 客户端</a></span>
+    <span style="display: inline-block; vertical-align: middle">
+        <a href="https://github.com/Febers/iUESTC">iUESTC - 电子科技大学 Android 客户端</a>
+    </span>
 </div>
 
 ## 许可协议
