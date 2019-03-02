@@ -39,16 +39,29 @@ class billService extends Service {
 
       try {
         const res = await request(option);
-        const data = await this.ctx.service.parser.parseTradeInfo(res.body);
+        const data = await this.ctx.service.parser.parseTradeInfo(res.body, payload.type);
         tradeDetailArray = tradeDetailArray.concat(data);
       } catch (e) {
         return this.ctx.throw(403, '解析账单列表失败');
       }
     }
+    if (tradeSumData.total_cost === undefined && tradeSumData.total_charge === undefined) {
+      if (tradeDetailArray.length === 0) {
+        tradeSumData.total_cost = 0;
+        tradeSumData.total_charge = 0;
+      }
+      if (tradeDetailArray.length === 1) {
+        tradeSumData.total_cost = tradeDetailArray[0].transaction < 0 ? -tradeDetailArray[0].transaction : 0;
+        tradeSumData.total_charge = tradeDetailArray[0].transaction > 0 ? tradeDetailArray[0].transaction : 0;
+      }
+    }
     return {
       total_cost: tradeSumData.total_cost,
       total_charge: tradeSumData.total_charge,
-      history: tradeDetailArray,
+      history: tradeDetailArray.map(detail => {
+        detail.transaction = detail.transaction > 0 ? `+${detail.transaction}` : `${detail.transaction}`;
+        return detail;
+      }),
     };
   }
 
@@ -62,9 +75,22 @@ class billService extends Service {
       }, cookies);
       const data = await this.traversePage(info);
       arr = arr.concat(data.history);
-      obj.total_cost = data.total_cost;
-      obj.total_charge = data.total_charge;
+      if (info.tradeSumData.total_cost && info.tradeSumData.total_charge) {
+        obj.total_cost = data.total_cost;
+        obj.total_charge = data.total_charge;
+      }
     }));
+
+    if (obj.total_cost === undefined && obj.total_charge === undefined) {
+      let total_cost = 0;
+      let total_charge = 0;
+      arr.forEach(detail => {
+        if (+detail.transaction < 0) total_cost += -detail.transaction;
+        if (+detail.transaction > 0) total_charge += +detail.transaction;
+      });
+      obj.total_cost = total_cost;
+      obj.total_charge = total_charge;
+    }
 
     arr.sort((a, b) => (moment(a.time).isBefore(moment(b.time)) ? 1 : -1));
     obj.history = arr;

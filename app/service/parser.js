@@ -327,22 +327,22 @@ class parserService extends Service {
     return data;
   }
 
-  parseTradeInfo(body) {
+  parseTradeInfo(body, type) {
     const $ = cheerio.load(body);
     const history = $('.trade_table > tbody > tr').map((i, el) => {
       const date = $(el).find('td:nth-of-type(1)').text();
       const time = $(el).find('td:nth-of-type(2)').text();
       const device = $(el).find('td:nth-of-type(3)').text() === '易支付' ? '电费充值' : $(el).find('td:nth-of-type(3)').text();
-      const cost = +$(el).find('td:nth-of-type(4) > span').text();
+      const transaction = type === 'charge' ? +$(el).find('td:nth-of-type(4) > span').text() : type === 'cost' ? -$(el).find('td:nth-of-type(4) > span').text() : +$(el).find('td:nth-of-type(4) > span').text();
       const balance = +$(el).find('td:nth-of-type(5)').text();
       return device !== '电费充值' ? {
         time: moment(`${date} ${time}`, 'YYYYMMDD HHmmss').format('YYYY-MM-DD HH:mm:ss'),
-        device, cost, balance,
+        device, transaction, balance,
       } : {
         time: moment(`${date} ${time}`, 'YYYYMMDD HHmmss').format('YYYY-MM-DD HH:mm:ss'),
         device,
-        cost: balance,
-        roomId: cost,
+        transaction: balance,
+        roomId: transaction,
       };
     }).get();
     history.shift();

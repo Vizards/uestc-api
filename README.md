@@ -12,9 +12,9 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 
 ## 功能
 
-以下功能尚未完全接口化。3、4 中的功能均以 302 跳转到相关网页的方式完成（已经过处理使其支持 HTTPS 和移动端视图）。
+> 以下功能尚未完全接口化。3、4 中的功能均以 302 跳转到相关网页的方式完成（已经过处理使其支持 HTTPS 和移动端视图）
 
-如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
+> 如果您有兴趣完善，欢迎 [Pull Request](https://github.com/Vizards/uestc-api/pulls)
 
 
 1. 教务系统
@@ -150,22 +150,30 @@ $ npm run autod
 
 参考：[autod](https://www.npmjs.com/package/autod) 
 
-## 衍生与合作产品
+## 合作产品
 
-<div>
-<img src="https://ipic.vizards.cc/2018-04-14-171713.png" alt="UESTC" width="60px" style="display: inline-block; vertical-align: middle"/>
-<span style="display: inline-block; vertical-align: middle">
-<a href="https://github.com/Vizards/uestc-react-native-ios">电子科技大学（UESTC）iOS 客户端</a>
-</span>
-</div>
-<div>
-    <div style="display: inline-block; vertical-align: middle; padding: 5px;">
-        <img src="https://raw.githubusercontent.com/Febers/iUESTC/master/picture/app_icon.png" alt="iUESTC" width="50px"/>
-    </div>
-    <span style="display: inline-block; vertical-align: middle">
-        <a href="https://github.com/Febers/iUESTC">iUESTC - 电子科技大学 Android 客户端</a>
-    </span>
-</div>
+如果您的产品或服务接入了 UESTC-API，可通过 [New Issue](https://github.com/Vizards/uestc-api/issue) 或 [Pull Request](https://github.com/Vizards/uestc-api/pulls) 展示在此处
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
+        <img width="60px" src="https://ipic.vizards.cc/2018-04-14-171713.png" alt="UESTC" width="60px"">
+      </td>
+      <td align="left" valign="middle">
+        <a href="https://github.com/Vizards/uestc-react-native-ios" target="_blank">电子科技大学（UESTC）iOS 客户端</a>
+      </td>
+    </tr>
+<tr>
+      <td align="center" valign="middle">
+        <img width="50px" src="https://raw.githubusercontent.com/Febers/iUESTC/master/picture/app_icon.png" alt="UESTC" width="60px">
+      </td>
+      <td align="left" valign="middle">
+        <a href="https://github.com/Febers/iUESTC" target="_blank">iUESTC - 电子科技大学 Android 客户端</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## 许可协议
 
