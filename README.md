@@ -113,13 +113,13 @@ APP_KEY=xxx JWT_SECRET=xxx YOUR_STU_NUM=xxx  YOUR_STU_PASS=xxx YOUR_ROOM_ID=xxx 
 **Windows(cmd.exe)**
 
 ```bash
-set APP_KEY=xxx && set JWT_SECRET=xxx && set YOUR_STU_NUM=xxx && set YOUR_STU_PASS=xxx && set YOUR_ROOM_ID=xxx && set ALINODE_APPID=xxx && set ALINODE_SECRET=xxx && set PROXY=xxx&&npm run dev
+set APP_KEY=xxx && set JWT_SECRET=xxx && set YOUR_STU_NUM=xxx && set YOUR_STU_PASS=xxx && set YOUR_ROOM_ID=xxx && set ALINODE_APPID=xxx && set ALINODE_SECRET=xxx && set PROXY=xxx && npm run dev
 ```
 
 **Windows(Powershell)**
 
 ```bash
-($env:APP_KEY=xxx) -and ($env:JWT_SECRET=xxx) -and ($env:YOUR_STU_NUM=xxx) -and ($env:YOUR_STU_PASS=xxx) -and ($env:YOUR_ROOM_ID=xxx) -and ($env:ALINODE_APPID=xxx) -and ($env:ALINODE_SECRET=xxx) -and ($env:PROXY=xxx) -and npm start
+($env:APP_KEY=xxx) -and ($env:JWT_SECRET=xxx) -and ($env:YOUR_STU_NUM=xxx) -and ($env:YOUR_STU_PASS=xxx) -and ($env:YOUR_ROOM_ID=xxx) -and ($env:ALINODE_APPID=xxx) -and ($env:ALINODE_SECRET=xxx) -and ($env:PROXY=xxx) -and npm run dev
 ```
 
 浏览器打开 `http://127.0.0.1:7001` 页面出现项目主页即为运行成功

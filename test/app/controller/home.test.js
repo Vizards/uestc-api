@@ -40,5 +40,7 @@ describe('test/app/controller/home.test.js', () => {
     assert(res.body.code === 201);
     assert(res.body.data.hasOwnProperty('startDate') === true);
     assert(res.body.data.hasOwnProperty('endDate') === true);
+    assert(res.body.data.holidays[0].hasOwnProperty('name') === true);
+    assert(res.body.data.holidays[0].date.length !== 0);
   });
 });
