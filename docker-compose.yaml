@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - docker_db_network
+    volumes:
+      - ${HOME}/docker/mongo:/data/db
+
+  uestc-api:
+    image: vizards/uestc-api
+    container_name: uestc-api
+    restart: always
+    ports:
+      - "7001:7001"
+    expose:
+      - "7001"
+    networks:
+      - docker_db_network
+      - docker_front_network
+    environment:
+      - APP_KEY=${APP_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - ALINODE_APPID=${ALINODE_APPID}
+      - ALINODE_SECRET=${ALINODE_SECRET}
+      - DB_URL=mongo
+      - WAIT_HOSTS=mongo:27017
+    depends_on:
+      - "mongo"
+
+networks:
+  docker_db_network:
+  docker_front_network:

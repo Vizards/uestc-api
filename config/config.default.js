@@ -23,7 +23,7 @@ module.exports = appInfo => {
   };
 
   config.mongoose = {
-    url: 'mongodb://127.0.0.1:27017/uestc',
+    url: `mongodb://${process.env.DB_URL ? process.env.DB_URL : '127.0.0.1'}:27017/uestc`,
     options: {
       autoReconnect: true,
       reconnectTries: Number.MAX_VALUE,
