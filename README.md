@@ -4,7 +4,7 @@
 
 > 👉 [https://uestc.ml](https://uestc.ml)
 
-[![node (tag)](https://img.shields.io/node/v/egg.svg?style=flat-square)](https://nodejs.org) [![](https://img.shields.io/travis/Vizards/uestc-api.svg?style=flat-square)](https://travis-ci.org/Vizards/uestc-api) [![](https://img.shields.io/codecov/c/github/Vizards/uestc-api.svg?style=flat-square)](https://codecov.io/gh/Vizards/uestc-api) [![Dependency Status](https://img.shields.io/david/Vizards/uestc-api.svg?style=flat-square)](https://david-dm.org/Vizards/uestc-api) [![](https://img.shields.io/badge/license-GPL-blue.svg?style=flat-square)](https://github.com/Vizards/uestc-api/blob/master/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/Vizards/uestc-api/pulls) [![%e2%9d%a4](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://github.com/Vizards/uestc-api)
+[![node (tag)](https://img.shields.io/node/v/egg.svg?style=flat-square)](https://nodejs.org) [![](https://img.shields.io/travis/Vizards/uestc-api.svg?style=flat-square)](https://travis-ci.org/Vizards/uestc-api) [![Docker Automated build (new hub)](https://shields-staging-pr-3139.herokuapp.com/docker/cloud/automated/vizards/uestc-api.svg?style=flat-square)](https://hub.docker.com/r/vizards/uestc-api) [![Docker Build Status (new hub)](https://shields-staging-pr-3139.herokuapp.com/docker/cloud/build/vizards/uestc-api.svg?style=flat-square)](https://hub.docker.com/r/vizards/uestc-api/builds) [![](https://img.shields.io/codecov/c/github/Vizards/uestc-api.svg?style=flat-square)](https://codecov.io/gh/Vizards/uestc-api) [![Dependency Status](https://img.shields.io/david/Vizards/uestc-api.svg?style=flat-square)](https://david-dm.org/Vizards/uestc-api) [![](https://img.shields.io/badge/license-GPL-blue.svg?style=flat-square)](https://github.com/Vizards/uestc-api/blob/dev/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/Vizards/uestc-api/pulls) [![%e2%9d%a4](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](https://github.com/Vizards/uestc-api)
 
 ## 介绍
 
@@ -61,8 +61,13 @@ UESTC-API 是电子科技大学部分网站功能的集成 API 接口，仅支�
 
 - Egg 框架文档：[egg - 为企业级框架和应用而生](https://eggjs.org)
 
+## 部署
 
-## 快速开始
+UESTC-API 现已提供 Docker 版本，但仍可灵活选择多种部署方式
+
+详见：[部署 - GitHub Wiki](https://github.com/Vizards/uestc-api/wiki/%E9%83%A8%E7%BD%B2)
+
+## 开发
 
 在开始之前，请确认您的电子科技大学本科统一身份认证系统账户已完成初始设置
 
