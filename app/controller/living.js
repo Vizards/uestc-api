@@ -23,6 +23,13 @@ class livingController extends Controller {
     ctx.helper.getSuccess({ ctx, res });
   }
 
+  // 一卡通挂失
+  async loss() {
+    const { ctx, service } = this;
+    const res = await service.loss.claim();
+    ctx.helper.postSuccess({ ctx, res });
+  }
+
   // 查询交易流水
   async bill() {
     const { ctx, service } = this;

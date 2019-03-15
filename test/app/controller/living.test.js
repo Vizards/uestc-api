@@ -32,6 +32,18 @@ describe('test/app/controller/living.test.js', () => {
     assert(res.body.data.hasOwnProperty('status') === true);
   });
 
+  it('report the loss of ecard', async () => {
+    const res = await app.httpRequest()
+      .post('/api/living/loss')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`)
+      .expect('Content-Type', /json/)
+      .expect(200);
+    assert(res.body.code === 201);
+    assert(res.body.data.retcode === 0 || res.body.data.retcode === 100 || res.body.data.retcode === 110 || res.body.data.retcode === 120);
+    assert(res.body.data.hasOwnProperty('retmsg') === true);
+  });
+
   it('should get specified bill', async () => {
     const body = {
       day: 180,
