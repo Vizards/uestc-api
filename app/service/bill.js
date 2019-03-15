@@ -46,14 +46,12 @@ class billService extends Service {
       }
     }
     if (tradeSumData.total_cost === undefined && tradeSumData.total_charge === undefined) {
-      if (tradeDetailArray.length === 0) {
-        tradeSumData.total_cost = 0;
-        tradeSumData.total_charge = 0;
-      }
-      if (tradeDetailArray.length === 1) {
-        tradeSumData.total_cost = tradeDetailArray[0].transaction < 0 ? -tradeDetailArray[0].transaction : 0;
-        tradeSumData.total_charge = tradeDetailArray[0].transaction > 0 ? tradeDetailArray[0].transaction : 0;
-      }
+      tradeSumData.total_cost = 0;
+      tradeSumData.total_charge = 0;
+      tradeDetailArray.forEach(tradeDetail => {
+        if (+tradeDetail.transaction < 0) tradeSumData.total_cost += -tradeDetail.transaction;
+        if (+tradeDetail.transaction > 0) tradeSumData.total_cost += +tradeDetail.transaction;
+      });
     }
     return {
       total_cost: tradeSumData.total_cost,

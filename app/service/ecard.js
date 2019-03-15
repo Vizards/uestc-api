@@ -65,12 +65,23 @@ class ecardService extends Service {
     }
   }
 
+  async balance() {
+    const payload = { day: 180, type: 'cost' };
+    const billData = await this.ctx.service.bill.query(payload);
+    if (billData.history[0]) {
+      return billData.history[0].balance;
+    }
+    return '180 天内没有消费，无法计算余额';
+  }
+
   async getPersonalInfo(cookies) {
     cookies = await this.ctx.helper.generateCookieString(this.ctx, undefined, JSON.stringify(cookies));
     const option = await this.ctx.helper.options(ecardPersonalUrl, 'POST', cookies);
     try {
       const res = await request(option);
-      return await this.ctx.service.parser.parseECardInfo(res.body);
+      const data = this.ctx.service.parser.parseECardInfo(res.body);
+      data.balance = await this.balance();
+      return data;
     } catch (e) {
       return this.ctx.throw(403, '获取一卡通个人信息失败');
     }
