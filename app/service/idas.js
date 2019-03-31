@@ -20,8 +20,8 @@ class IdasService extends Service {
       const option = await this.ctx.helper.options(loginUrl);
       const res = await request(option);
       const $ = await cheerio.load(res.body);
-      // 又不加密了，佛了
-      // const aesKey = res.body.match(/pwdDefaultEncryptSalt.*/)[0].split('"')[1];
+      // 前端加密密码的 aesKey，一般隐藏在 header 中，但是位置会发生变化，所以直接全局搜索吧
+      const aesKey = res.body.match(/pwdDefaultEncryptSalt.*/)[0].split('"')[1];
       const names = await $('#casLoginForm > input').map((i, el) => {
         return $(el).attr('name');
       }).get();
@@ -31,10 +31,11 @@ class IdasService extends Service {
       }).get();
 
       const formData = await _.object(names, values);
-      // return Promise.resolve(Object.assign(params, { Cookies1: `${res.headers['set-cookie'][0]};${res.headers['set-cookie'][1]}`, aesKey }));
       return {
         formData,
         cookies: res.headers['set-cookie'],
+        // 教务系统前端密码加密的 aesKey，必须传入
+        aesKey,
       };
     } catch (err) {
       return this.ctx.throw(403, '暂时无法访问统一身份认证系统');
@@ -43,12 +44,12 @@ class IdasService extends Service {
 
   // 获取重定向地址
   // async getRedirectUrl(params, payload, captcha) {
-  async getRedirectUrl(formData, cookies, payload) {
+  async getRedirectUrl(params, payload) {
     // 处理验证码
     // const option = await this.ctx.helper.options(loginUrl, 'POST', params.Cookies1, _.extend(_.omit(params, 'Cookies1'), payload, captcha, { rememberMe: 'on' }));
-    // 处理密码，又不加密了，佛了
-    // payload.password = this.ctx.helper.encrypt(payload.password, params.aesKey);
-    const option = await this.ctx.helper.options(loginUrl, 'POST', cookies.join(';'), _.extend(formData, payload, { rememberMe: 'on' }));
+    // 处理密码，仅在教务系统开启加密时使用
+    payload.password = this.ctx.helper.encrypt(payload.password, params.aesKey);
+    const option = await this.ctx.helper.options(loginUrl, 'POST', params.cookies.join(';'), _.extend(params.formData, payload, { rememberMe: 'on' }));
     const res = await request(option);
     if (res.body.includes('您提供的用户名或者密码有误')) {
       return this.ctx.throw(403, '您提供的用户名或者密码有误');
@@ -108,7 +109,7 @@ class IdasService extends Service {
       //   }
       // }
       const params = await this.getParams();
-      const redirectParams = await this.getRedirectUrl(params.formData, params.cookies, payload);
+      const redirectParams = await this.getRedirectUrl(params, payload);
       return await this.genCookies(redirectParams, params.cookies);
     } catch (err) {
       ctx.throw(err);

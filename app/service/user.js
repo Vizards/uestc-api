@@ -47,7 +47,7 @@ class UserService extends Service {
     const options = await ctx.helper.options(exitUrl, 'GET', finalCookies);
     try {
       const res = await request(options);
-      if (res.statusCode === 200 && res.body.includes('您已经成功退出统一身份认证系统')) {
+      if (res.statusCode === 200 && res.body.includes('注销成功')) {
         return Promise.resolve('已成功退出统一身份认证系统');
       }
     } catch (err) {
